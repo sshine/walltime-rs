@@ -1,0 +1,12 @@
+---
+source: crates/walltime-core/src/summary.rs
+expression: output
+---
+
+──────────────────────────────
+  walltime summary
+──────────────────────────────
+  Total:      2.000s
+
+  Exit code:  0
+──────────────────────────────

@@ -1,0 +1,23 @@
+[package]
+name = "walltime-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Core library for measuring time spent in a process"
+
+[lints]
+workspace = true
+
+[dependencies]
+thiserror.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tracing.workspace = true
+tokio.workspace = true
+regex.workspace = true
+chrono.workspace = true
+
+[dev-dependencies]
+insta.workspace = true
+tempfile.workspace = true
