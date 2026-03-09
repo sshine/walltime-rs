@@ -1,0 +1,51 @@
+{
+  description = "A library and CLI for measuring time spent in a process";
+
+  nixConfig = {
+    extra-substituters = [ "https://crate2nix.cachix.org" ];
+    extra-trusted-public-keys = [ "crate2nix.cachix.org-1:bXMeMOBI39htMnFaFj5MkBczuNKDfTwBBzHbPmcJ+lE=" ];
+  };
+
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    crate2nix.url = "github:nix-community/crate2nix";
+    devshell = {
+      url = "github:numtide/devshell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+  };
+
+  outputs = inputs:
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
+      systems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+
+      imports = [
+        inputs.devshell.flakeModule
+        ./nix/rust-overlay/flake-module.nix
+        ./nix/devshell/flake-module.nix
+      ];
+
+      perSystem = { pkgs, system, ... }:
+        let
+          cargoNix = inputs.crate2nix.tools.${system}.appliedCargoNix {
+            name = "walltime";
+            src = ./.;
+          };
+        in
+        {
+          checks = {
+            walltime-core = cargoNix.workspaceMembers.walltime-core.build;
+            walltime-cli = cargoNix.workspaceMembers.walltime-cli.build;
+          };
+
+          packages = {
+            default = cargoNix.workspaceMembers.walltime-cli.build;
+          };
+        };
+    };
+}
