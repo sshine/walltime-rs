@@ -37,12 +37,19 @@ async fn main() -> ExitCode {
     let command = args.command[0].clone();
     let cmd_args = args.command[1..].to_vec();
 
+    let force_color = match args.color {
+        args::ColorChoice::Always => true,
+        args::ColorChoice::Never => false,
+        args::ColorChoice::Auto => std::io::IsTerminal::is_terminal(&std::io::stdout()),
+    };
+
     let config = RunConfig {
         command: command.clone(),
         args: cmd_args.clone(),
         timestamps: args.timestamps,
         timestamp_format: args.timestamp_format.into(),
         phase_definitions,
+        force_color,
     };
 
     // Run the command
