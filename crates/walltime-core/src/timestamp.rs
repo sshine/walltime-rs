@@ -26,24 +26,33 @@ impl fmt::Display for TimestampFormat {
     }
 }
 
+/// Width of the elapsed duration field inside timestamp prefixes.
+///
+/// Right-aligned to 9 chars, enough for 4-digit seconds (`XXXX.XXXs`),
+/// so the prefix width stays constant and output doesn't shift.
+const ELAPSED_DURATION_WIDTH: usize = 9;
+
 /// Format a timestamp prefix string.
+///
+/// The elapsed duration is right-aligned to a fixed width so that the
+/// prefix is always the same number of characters regardless of elapsed time.
 pub fn format_timestamp(
     format: TimestampFormat,
     elapsed: Duration,
     wall_clock: DateTime<Local>,
 ) -> String {
+    let dur = format_duration(elapsed);
     match format {
         TimestampFormat::Elapsed => {
-            format!("[+{}]", format_duration(elapsed))
+            format!("[+{dur:>ELAPSED_DURATION_WIDTH$}]")
         }
         TimestampFormat::Absolute => {
             format!("[{}]", wall_clock.format("%H:%M:%S%.3f"))
         }
         TimestampFormat::Both => {
             format!(
-                "[{} +{}]",
+                "[{} +{dur:>ELAPSED_DURATION_WIDTH$}]",
                 wall_clock.format("%H:%M:%S%.3f"),
-                format_duration(elapsed)
             )
         }
     }
@@ -52,26 +61,6 @@ pub fn format_timestamp(
 /// Format a duration as `Xs.XXXs` (e.g., `1.234s`, `0.001s`, `123.456s`).
 pub fn format_duration(d: Duration) -> String {
     format!("{:.3}s", d.as_secs_f64())
-}
-
-/// Format a duration right-aligned to a given width (padding with spaces on the left).
-pub fn format_duration_padded(d: Duration, width: usize) -> String {
-    let s = format_duration(d);
-    format!("{s:>width$}")
-}
-
-/// Format a timestamp prefix right-padded to a fixed width.
-///
-/// This ensures alignment when elapsed time crosses digit boundaries
-/// (e.g. `[+9.147s] ` vs `[+10.123s]`).
-pub fn format_timestamp_padded(
-    format: TimestampFormat,
-    elapsed: Duration,
-    wall_clock: DateTime<Local>,
-    width: usize,
-) -> String {
-    let ts = format_timestamp(format, elapsed, wall_clock);
-    format!("{ts:<width$}")
 }
 
 #[cfg(test)]
@@ -95,7 +84,7 @@ mod tests {
             Duration::from_secs_f64(1.234),
             test_time(),
         );
-        assert_eq!(result, "[+1.234s]");
+        assert_eq!(result, "[+   1.234s]");
     }
 
     #[test]
@@ -105,7 +94,35 @@ mod tests {
             Duration::from_secs_f64(0.0),
             test_time(),
         );
-        assert_eq!(result, "[+0.000s]");
+        assert_eq!(result, "[+   0.000s]");
+    }
+
+    #[test]
+    fn elapsed_format_large() {
+        let result = format_timestamp(
+            TimestampFormat::Elapsed,
+            Duration::from_secs_f64(1234.567),
+            test_time(),
+        );
+        assert_eq!(result, "[+1234.567s]");
+    }
+
+    #[test]
+    fn elapsed_format_double_digits() {
+        // Verify alignment is consistent across digit boundaries
+        let r1 = format_timestamp(
+            TimestampFormat::Elapsed,
+            Duration::from_secs_f64(9.147),
+            test_time(),
+        );
+        let r2 = format_timestamp(
+            TimestampFormat::Elapsed,
+            Duration::from_secs_f64(10.123),
+            test_time(),
+        );
+        assert_eq!(r1.len(), r2.len());
+        assert_eq!(r1, "[+   9.147s]");
+        assert_eq!(r2, "[+  10.123s]");
     }
 
     #[test]
@@ -125,7 +142,7 @@ mod tests {
             Duration::from_secs_f64(1.234),
             test_time(),
         );
-        assert_eq!(result, "[10:23:45.123 +1.234s]");
+        assert_eq!(result, "[10:23:45.123 +   1.234s]");
     }
 
     #[test]

@@ -110,9 +110,13 @@ fn format_history_table(out: &mut String, history: &[HistoryEntry], command: &[S
     // Column widths - compute from actual data so the table never overflows
     let run_w = 3.max(history.len().to_string().len());
     let date_w = 12;
-    let total_w = "Total"
-        .len()
-        .max(history.iter().map(|e| fmt_ms(e.total_duration_ms).len()).max().unwrap_or(0));
+    let total_w = "Total".len().max(
+        history
+            .iter()
+            .map(|e| fmt_ms(e.total_duration_ms).len())
+            .max()
+            .unwrap_or(0),
+    );
     let phase_ws: Vec<usize> = phase_names
         .iter()
         .map(|name| {
@@ -313,6 +317,40 @@ mod tests {
         ];
         let output = format_summary(&result, &history, &["cargo".into(), "build".into()]);
         // Redact dates since they depend on local timezone
+        let output = regex::Regex::new(r"[A-Z][a-z]{2} \d{2} \d{2}:\d{2}")
+            .expect("valid regex")
+            .replace_all(&output, "[DATE]")
+            .to_string();
+        insta::assert_snapshot!(output);
+    }
+
+    #[test]
+    fn summary_with_history_wide_total() {
+        let result = make_result(16705, vec![], 0);
+        let history = vec![
+            HistoryEntry {
+                command: vec!["cargo".into(), "build".into()],
+                started_at: "2026-03-09T09:23:00Z".parse().expect("valid"),
+                total_duration_ms: 83,
+                phases: vec![],
+                exit_code: Some(0),
+            },
+            HistoryEntry {
+                command: vec!["cargo".into(), "build".into()],
+                started_at: "2026-03-09T09:30:00Z".parse().expect("valid"),
+                total_duration_ms: 84,
+                phases: vec![],
+                exit_code: Some(0),
+            },
+            HistoryEntry {
+                command: vec!["cargo".into(), "build".into()],
+                started_at: "2026-03-09T09:45:00Z".parse().expect("valid"),
+                total_duration_ms: 16705,
+                phases: vec![],
+                exit_code: Some(0),
+            },
+        ];
+        let output = format_summary(&result, &history, &["cargo".into(), "build".into()]);
         let output = regex::Regex::new(r"[A-Z][a-z]{2} \d{2} \d{2}:\d{2}")
             .expect("valid regex")
             .replace_all(&output, "[DATE]")
