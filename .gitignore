@@ -1,5 +1,7 @@
 # Rust
 /target/
+*.snap
+walltime-cli
 
 # Nix
 /.direnv/
@@ -18,3 +20,6 @@ Thumbs.db
 # Editor backups
 *~
 \#*\#
+
+# Agentic
+.claude/
