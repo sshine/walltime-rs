@@ -6,6 +6,10 @@ license.workspace = true
 repository.workspace = true
 description = "CLI for measuring time spent in a process"
 
+[[bin]]
+name = "wtime"
+path = "src/main.rs"
+
 [lints]
 workspace = true
 

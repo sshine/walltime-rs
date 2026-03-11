@@ -7,7 +7,7 @@ use clap::{Parser, ValueEnum};
 /// Runs a command and provides a colorful timing summary, optional line
 /// timestamps, phase tracking, and run history comparison.
 #[derive(Debug, Parser)]
-#[command(name = "walltime", version, about)]
+#[command(name = "wtime", version, about)]
 pub struct Args {
     /// Enable line timestamp prefixing.
     #[arg(short = 't', long = "timestamps")]
