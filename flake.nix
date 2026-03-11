@@ -30,6 +30,10 @@
         ./nix/devshell/flake-module.nix
       ];
 
+      flake.overlays.default = final: prev: {
+        walltime-cli = inputs.self.packages.${final.stdenv.hostPlatform.system}.default;
+      };
+
       perSystem = { pkgs, system, ... }:
         let
           cargoNix = inputs.crate2nix.tools.${system}.appliedCargoNix {
@@ -45,6 +49,11 @@
 
           packages = {
             default = cargoNix.workspaceMembers.walltime-cli.build;
+          };
+
+          apps.default = {
+            type = "app";
+            program = "${cargoNix.workspaceMembers.walltime-cli.build}/bin/wtime";
           };
         };
     };
