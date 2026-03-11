@@ -47,7 +47,8 @@ async fn main() -> ExitCode {
         command: command.clone(),
         args: cmd_args.clone(),
         timestamps: args.timestamps,
-        timestamp_format: args.timestamp_format.into(),
+        timestamp_format: args.timestamp_format.clone(),
+        from_zero: args.from_zero,
         phase_definitions,
         force_color,
     };
@@ -67,7 +68,7 @@ async fn main() -> ExitCode {
     let full_command = args.command.clone();
     let log_path = Path::new(&args.log_file);
 
-    let history = if !args.no_history {
+    let history = if !args.no_log {
         // Load existing history
         let mut hist = match history::load_history(log_path, &full_command) {
             Ok(h) => h,

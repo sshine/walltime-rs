@@ -3,7 +3,9 @@
 
   nixConfig = {
     extra-substituters = [ "https://crate2nix.cachix.org" ];
-    extra-trusted-public-keys = [ "crate2nix.cachix.org-1:bXMeMOBI39htMnFaFj5MkBczuNKDfTwBBzHbPmcJ+lE=" ];
+    extra-trusted-public-keys = [
+      "crate2nix.cachix.org-1:bXMeMOBI39htMnFaFj5MkBczuNKDfTwBBzHbPmcJ+lE="
+    ];
   };
 
   inputs = {
@@ -14,19 +16,35 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     crate2nix.url = "github:nix-community/crate2nix";
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     devshell = {
       url = "github:numtide/devshell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    lefthook-nix = {
+      url = "github:sudosubin/lefthook.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = inputs:
+  outputs =
+    inputs:
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+      systems = [
+        "x86_64-linux"
+        "aarch64-linux"
+        "x86_64-darwin"
+        "aarch64-darwin"
+      ];
 
       imports = [
         inputs.devshell.flakeModule
+        inputs.treefmt-nix.flakeModule
         ./nix/rust-overlay/flake-module.nix
+        ./nix/treefmt/flake-module.nix
         ./nix/devshell/flake-module.nix
       ];
 
@@ -34,7 +52,8 @@
         walltime-cli = inputs.self.packages.${final.stdenv.hostPlatform.system}.default;
       };
 
-      perSystem = { pkgs, system, ... }:
+      perSystem =
+        { pkgs, system, ... }:
         let
           cargoNix = inputs.crate2nix.tools.${system}.appliedCargoNix {
             name = "walltime";

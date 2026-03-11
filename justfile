@@ -2,13 +2,13 @@
 default:
     @just --list
 
-# Format all code
+# Format all code (Rust + Nix)
 fmt:
-    cargo fmt --all
+    treefmt
 
-# Check formatting
+# Check formatting (Rust + Nix)
 fmt-check:
-    cargo fmt --all -- --check
+    treefmt --fail-on-change --no-cache
 
 # Run clippy lints
 lint:
@@ -26,9 +26,9 @@ test-verbose:
 build:
     cargo build --release --all-features
 
-# Generate and open documentation
+# Generate documentation (opens in browser unless $CI is set)
 doc:
-    cargo doc --no-deps --all-features --open
+    cargo doc --no-deps --all-features {{ if env("CI", "") != "" { "" } else { "--open" } }}
 
 # Run CI checks locally
 ci: fmt-check lint test doc build

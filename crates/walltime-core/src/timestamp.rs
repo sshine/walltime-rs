@@ -1,64 +1,35 @@
 //! Timestamp formatting for output line prefixes.
 
-use chrono::{DateTime, Local};
-use std::fmt;
+use chrono::{DateTime, Local, NaiveDate};
 use std::time::Duration;
 
-/// Format for timestamp prefixes on output lines.
-#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
-pub enum TimestampFormat {
-    /// Show elapsed time since start: `[+1.234s]`
-    #[default]
-    Elapsed,
-    /// Show wall-clock time: `[10:23:45.123]`
-    Absolute,
-    /// Show both: `[10:23:45.123 +1.234s]`
-    Both,
-}
-
-impl fmt::Display for TimestampFormat {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            Self::Elapsed => write!(f, "elapsed"),
-            Self::Absolute => write!(f, "absolute"),
-            Self::Both => write!(f, "both"),
-        }
-    }
-}
-
-/// Width of the elapsed duration field inside timestamp prefixes.
-///
-/// Right-aligned to 9 chars, enough for 4-digit seconds (`XXXX.XXXs`),
-/// so the prefix width stays constant and output doesn't shift.
-const ELAPSED_DURATION_WIDTH: usize = 9;
+/// The default timestamp format string (chrono syntax): `HH:MM:SS.mmm`.
+pub const DEFAULT_FORMAT: &str = "%H:%M:%S%.3f";
 
 /// Format a timestamp prefix string.
 ///
-/// The elapsed duration is right-aligned to a fixed width so that the
-/// prefix is always the same number of characters regardless of elapsed time.
+/// Uses `fmt` as a chrono format string. When `from_zero` is true, the time
+/// base is `00:00:00.000` plus the elapsed duration instead of wall-clock time.
 pub fn format_timestamp(
-    format: TimestampFormat,
+    fmt: &str,
     elapsed: Duration,
     wall_clock: DateTime<Local>,
+    from_zero: bool,
 ) -> String {
-    let dur = format_duration(elapsed);
-    match format {
-        TimestampFormat::Elapsed => {
-            format!("[+{dur:>ELAPSED_DURATION_WIDTH$}]")
-        }
-        TimestampFormat::Absolute => {
-            format!("[{}]", wall_clock.format("%H:%M:%S%.3f"))
-        }
-        TimestampFormat::Both => {
-            format!(
-                "[{} +{dur:>ELAPSED_DURATION_WIDTH$}]",
-                wall_clock.format("%H:%M:%S%.3f"),
-            )
-        }
-    }
+    let formatted = if from_zero {
+        let base = NaiveDate::from_ymd_opt(2000, 1, 1)
+            .expect("valid date")
+            .and_hms_opt(0, 0, 0)
+            .expect("valid time");
+        let t = base + chrono::Duration::from_std(elapsed).unwrap_or(chrono::Duration::MAX);
+        t.format(fmt).to_string()
+    } else {
+        wall_clock.format(fmt).to_string()
+    };
+    format!("[{formatted}]")
 }
 
-/// Format a duration as `Xs.XXXs` (e.g., `1.234s`, `0.001s`, `123.456s`).
+/// Format a duration as `X.XXXs` (e.g., `1.234s`, `0.001s`, `123.456s`).
 pub fn format_duration(d: Duration) -> String {
     format!("{:.3}s", d.as_secs_f64())
 }
@@ -69,7 +40,6 @@ mod tests {
     use chrono::TimeZone;
 
     fn test_time() -> DateTime<Local> {
-        // Create a fixed local time for testing
         Local
             .with_ymd_and_hms(2026, 3, 9, 10, 23, 45)
             .unwrap()
@@ -78,71 +48,59 @@ mod tests {
     }
 
     #[test]
-    fn elapsed_format() {
+    fn wall_clock_default_format() {
         let result = format_timestamp(
-            TimestampFormat::Elapsed,
+            DEFAULT_FORMAT,
             Duration::from_secs_f64(1.234),
             test_time(),
-        );
-        assert_eq!(result, "[+   1.234s]");
-    }
-
-    #[test]
-    fn elapsed_format_zero() {
-        let result = format_timestamp(
-            TimestampFormat::Elapsed,
-            Duration::from_secs_f64(0.0),
-            test_time(),
-        );
-        assert_eq!(result, "[+   0.000s]");
-    }
-
-    #[test]
-    fn elapsed_format_large() {
-        let result = format_timestamp(
-            TimestampFormat::Elapsed,
-            Duration::from_secs_f64(1234.567),
-            test_time(),
-        );
-        assert_eq!(result, "[+1234.567s]");
-    }
-
-    #[test]
-    fn elapsed_format_double_digits() {
-        // Verify alignment is consistent across digit boundaries
-        let r1 = format_timestamp(
-            TimestampFormat::Elapsed,
-            Duration::from_secs_f64(9.147),
-            test_time(),
-        );
-        let r2 = format_timestamp(
-            TimestampFormat::Elapsed,
-            Duration::from_secs_f64(10.123),
-            test_time(),
-        );
-        assert_eq!(r1.len(), r2.len());
-        assert_eq!(r1, "[+   9.147s]");
-        assert_eq!(r2, "[+  10.123s]");
-    }
-
-    #[test]
-    fn absolute_format() {
-        let result = format_timestamp(
-            TimestampFormat::Absolute,
-            Duration::from_secs_f64(1.234),
-            test_time(),
+            false,
         );
         assert_eq!(result, "[10:23:45.123]");
     }
 
     #[test]
-    fn both_format() {
+    fn from_zero_default_format() {
         let result = format_timestamp(
-            TimestampFormat::Both,
-            Duration::from_secs_f64(1.234),
+            DEFAULT_FORMAT,
+            Duration::from_secs_f64(83.456),
             test_time(),
+            true,
         );
-        assert_eq!(result, "[10:23:45.123 +   1.234s]");
+        assert_eq!(result, "[00:01:23.456]");
+    }
+
+    #[test]
+    fn from_zero_at_zero() {
+        let result = format_timestamp(
+            DEFAULT_FORMAT,
+            Duration::from_secs_f64(0.0),
+            test_time(),
+            true,
+        );
+        assert_eq!(result, "[00:00:00.000]");
+    }
+
+    #[test]
+    fn from_zero_over_one_hour() {
+        let result = format_timestamp(
+            DEFAULT_FORMAT,
+            Duration::from_secs_f64(3661.234),
+            test_time(),
+            true,
+        );
+        assert_eq!(result, "[01:01:01.234]");
+    }
+
+    #[test]
+    fn custom_format_seconds_only() {
+        let result = format_timestamp("%S%.3f", Duration::from_secs_f64(5.678), test_time(), false);
+        assert_eq!(result, "[45.123]");
+    }
+
+    #[test]
+    fn custom_format_from_zero() {
+        let result = format_timestamp("%M:%S", Duration::from_secs_f64(65.0), test_time(), true);
+        assert_eq!(result, "[01:05]");
     }
 
     #[test]

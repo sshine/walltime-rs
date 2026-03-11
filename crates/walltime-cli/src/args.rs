@@ -1,6 +1,7 @@
 //! CLI argument definitions.
 
 use clap::{Parser, ValueEnum};
+use walltime_core::timestamp::DEFAULT_FORMAT;
 
 /// A modern replacement for the UNIX `time` command.
 ///
@@ -13,9 +14,13 @@ pub struct Args {
     #[arg(short = 't', long = "timestamps")]
     pub timestamps: bool,
 
-    /// Timestamp format: elapsed, absolute, or both.
-    #[arg(long = "timestamp-format", default_value = "elapsed")]
-    pub timestamp_format: TimestampFormatArg,
+    /// Timestamp format (chrono syntax).
+    #[arg(short = 'f', long = "timestamp-format", default_value = DEFAULT_FORMAT)]
+    pub timestamp_format: String,
+
+    /// Count timestamps from 00:00:00.000 instead of wall-clock time.
+    #[arg(short = '0', long = "from-zero")]
+    pub from_zero: bool,
 
     /// Define a phase boundary (repeatable). Format: NAME=REGEX
     #[arg(short = 'p', long = "phase", value_name = "NAME=REGEX")]
@@ -25,42 +30,21 @@ pub struct Args {
     #[arg(long = "no-summary")]
     pub no_summary: bool,
 
-    /// Don't save or show history.
-    #[arg(long = "no-history")]
-    pub no_history: bool,
+    /// Don't save or show the run log.
+    #[arg(long = "no-log")]
+    pub no_log: bool,
 
-    /// History file path.
+    /// Log file path.
     #[arg(long = "log-file", default_value = ".walltime.jsonl")]
     pub log_file: String,
 
-    /// When to use colors: auto, always, never.
+    /// When to use colors.
     #[arg(long = "color", default_value = "auto")]
     pub color: ColorChoice,
 
     /// Command to run.
     #[arg(trailing_var_arg = true, required = true)]
     pub command: Vec<String>,
-}
-
-/// Timestamp format choice for CLI.
-#[derive(Debug, Clone, Copy, ValueEnum)]
-pub enum TimestampFormatArg {
-    /// Elapsed time since start.
-    Elapsed,
-    /// Wall-clock time.
-    Absolute,
-    /// Both elapsed and wall-clock.
-    Both,
-}
-
-impl From<TimestampFormatArg> for walltime_core::timestamp::TimestampFormat {
-    fn from(arg: TimestampFormatArg) -> Self {
-        match arg {
-            TimestampFormatArg::Elapsed => Self::Elapsed,
-            TimestampFormatArg::Absolute => Self::Absolute,
-            TimestampFormatArg::Both => Self::Both,
-        }
-    }
 }
 
 /// Color output choice for CLI.
