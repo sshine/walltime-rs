@@ -6,6 +6,7 @@ walltime-cli
 # Nix
 /.direnv/
 /result
+/lefthook.yml
 
 # IDE
 .idea/

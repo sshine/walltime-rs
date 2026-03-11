@@ -2,29 +2,28 @@ name: Rust CI
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   pull_request:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      CARGO_TERM_COLOR: always
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1, 2025-12-02
 
-      - name: Install Nix
-        uses: nixbuild/nix-quick-install-action@v34
+      - uses: nixbuild/nix-quick-install-action@2c9db80fb984ceb1bcaa77cdda3fdf8cfba83c7b # v34, 2025-09-24
         with:
           nix_conf: |
             keep-env-derivations = true
             keep-outputs = true
 
       - name: Restore and save Nix store
-        uses: nix-community/cache-nix-action@v7
+        uses: nix-community/cache-nix-action@106bba72ed8e29c8357661199511ef07790175e9 # v7, 2026-01-08
         with:
           primary-key: nix-${{ runner.os }}-${{ hashFiles('**/*.nix', '**/flake.lock') }}
           restore-prefixes-first-match: nix-${{ runner.os }}-
@@ -39,16 +38,16 @@ jobs:
         run: nix develop -c true
 
       - name: Check formatting
-        run: nix develop -c cargo fmt --all -- --check
+        run: nix develop -c just fmt-check
 
       - name: Clippy
-        run: nix develop -c cargo clippy --all-targets --all-features -- -D warnings
+        run: nix develop -c just lint
 
       - name: Test
-        run: nix develop -c cargo test --all-features
-
-      - name: Build
-        run: nix develop -c cargo build --release --all-features
+        run: nix develop -c just test
 
       - name: Documentation
         run: nix develop -c cargo doc --no-deps --all-features
+
+      - name: Build
+        run: nix develop -c just build

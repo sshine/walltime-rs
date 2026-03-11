@@ -9,7 +9,7 @@ use tokio::process::Command;
 use crate::Result;
 use crate::phase::{PhaseDefinition, PhaseTracker};
 use crate::summary::{PhaseTiming, RunResult};
-use crate::timestamp::{TimestampFormat, format_timestamp};
+use crate::timestamp::format_timestamp;
 
 /// Configuration for a run.
 pub struct RunConfig {
@@ -19,8 +19,10 @@ pub struct RunConfig {
     pub args: Vec<String>,
     /// Whether to prefix output lines with timestamps.
     pub timestamps: bool,
-    /// The timestamp format to use.
-    pub timestamp_format: TimestampFormat,
+    /// The chrono format string for timestamps.
+    pub timestamp_format: String,
+    /// Whether to count from zero instead of wall-clock time.
+    pub from_zero: bool,
     /// Phase definitions for tracking.
     pub phase_definitions: Vec<PhaseDefinition>,
     /// Whether to set env vars that force color output in the child process.
@@ -32,14 +34,15 @@ fn write_line(
     writer: &mut dyn Write,
     line: &str,
     timestamps: bool,
-    timestamp_format: TimestampFormat,
+    timestamp_format: &str,
+    from_zero: bool,
     start: Instant,
 ) -> std::io::Result<()> {
     if timestamps {
         let now = Instant::now();
         let elapsed = now.duration_since(start);
         let wall_clock = Local::now();
-        let ts = format_timestamp(timestamp_format, elapsed, wall_clock);
+        let ts = format_timestamp(timestamp_format, elapsed, wall_clock, from_zero);
         writeln!(writer, "{ts} {line}")?;
     } else {
         writeln!(writer, "{line}")?;
@@ -87,14 +90,14 @@ pub async fn run(config: RunConfig) -> Result<RunResult> {
                     Some(line) => {
                         phase_tracker.process_line(&line, Instant::now());
                         let mut out = std::io::stdout().lock();
-                        write_line(&mut out, &line, config.timestamps, config.timestamp_format, start)?;
+                        write_line(&mut out, &line, config.timestamps, &config.timestamp_format, config.from_zero, start)?;
                     }
                     None => {
                         // stdout closed, drain stderr
                         while let Some(line) = stderr_reader.next_line().await? {
                             phase_tracker.process_line(&line, Instant::now());
                             let mut err = std::io::stderr().lock();
-                            write_line(&mut err, &line, config.timestamps, config.timestamp_format, start)?;
+                            write_line(&mut err, &line, config.timestamps, &config.timestamp_format, config.from_zero, start)?;
                         }
                         break;
                     }
@@ -105,14 +108,14 @@ pub async fn run(config: RunConfig) -> Result<RunResult> {
                     Some(line) => {
                         phase_tracker.process_line(&line, Instant::now());
                         let mut err = std::io::stderr().lock();
-                        write_line(&mut err, &line, config.timestamps, config.timestamp_format, start)?;
+                        write_line(&mut err, &line, config.timestamps, &config.timestamp_format, config.from_zero, start)?;
                     }
                     None => {
                         // stderr closed, drain stdout
                         while let Some(line) = stdout_reader.next_line().await? {
                             phase_tracker.process_line(&line, Instant::now());
                             let mut out = std::io::stdout().lock();
-                            write_line(&mut out, &line, config.timestamps, config.timestamp_format, start)?;
+                            write_line(&mut out, &line, config.timestamps, &config.timestamp_format, config.from_zero, start)?;
                         }
                         break;
                     }

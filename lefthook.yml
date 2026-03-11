@@ -1,6 +1,0 @@
-pre-commit:
-  commands:
-    fmt-check:
-      run: cargo fmt --all -- --check
-    clippy:
-      run: cargo clippy --all-targets --all-features -- -D warnings
