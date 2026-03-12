@@ -1,9 +1,10 @@
-{ ... }:
+{ inputs, ... }:
 {
+  imports = [ inputs.treefmt-nix.flakeModule ];
   perSystem =
     { pkgs, ... }:
     let
-      rust-toolchain = pkgs.rust-bin.fromRustupToolchainFile ../../rust-toolchain.toml;
+      rust-toolchain = pkgs.rust-bin.fromRustupToolchainFile ../rust-toolchain.toml;
     in
     {
       treefmt = {

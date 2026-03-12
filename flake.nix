@@ -41,52 +41,48 @@
       url = "github:sudosubin/lefthook.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    import-tree.url = "github:vic/import-tree";
   };
 
   outputs =
     inputs:
-    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = [
-        "x86_64-linux"
-        "aarch64-linux"
-        "x86_64-darwin"
-        "aarch64-darwin"
-      ];
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } (
+      inputs.import-tree ./nix
+      // {
+        systems = [
+          "x86_64-linux"
+          "aarch64-linux"
+          "x86_64-darwin"
+          "aarch64-darwin"
+        ];
 
-      imports = [
-        inputs.devshell.flakeModule
-        inputs.treefmt-nix.flakeModule
-        ./nix/rust-overlay/flake-module.nix
-        ./nix/treefmt/flake-module.nix
-        ./nix/devshell/flake-module.nix
-      ];
-
-      flake.overlays.default = final: prev: {
-        walltime-cli = inputs.self.packages.${final.stdenv.hostPlatform.system}.default;
-      };
-
-      perSystem =
-        { pkgs, system, ... }:
-        let
-          cargoNix = inputs.crate2nix.tools.${system}.appliedCargoNix {
-            name = "walltime";
-            src = ./.;
-          };
-        in
-        {
-          checks = {
-            walltime-core = cargoNix.workspaceMembers.walltime-core.build;
-            walltime-cli = cargoNix.workspaceMembers.walltime-cli.build;
-          };
-
-          packages = {
-            default = cargoNix.workspaceMembers.walltime-cli.build;
-          };
-
-          apps.default = {
-            type = "app";
-            program = "${cargoNix.workspaceMembers.walltime-cli.build}/bin/wtime";
-          };
+        flake.overlays.default = final: prev: {
+          walltime-cli = inputs.self.packages.${final.stdenv.hostPlatform.system}.default;
         };
-    };
+
+        perSystem =
+          { pkgs, system, ... }:
+          let
+            cargoNix = inputs.crate2nix.tools.${system}.appliedCargoNix {
+              name = "walltime";
+              src = ./.;
+            };
+          in
+          {
+            checks = {
+              walltime-core = cargoNix.workspaceMembers.walltime-core.build;
+              walltime-cli = cargoNix.workspaceMembers.walltime-cli.build;
+            };
+
+            packages = {
+              default = cargoNix.workspaceMembers.walltime-cli.build;
+            };
+
+            apps.default = {
+              type = "app";
+              program = "${cargoNix.workspaceMembers.walltime-cli.build}/bin/wtime";
+            };
+          };
+      }
+    );
 }

@@ -1,5 +1,6 @@
 { self, inputs, ... }:
 {
+  imports = [ inputs.devshell.flakeModule ];
   perSystem =
     {
       config,
@@ -9,7 +10,7 @@
       ...
     }:
     let
-      rust-toolchain = pkgs.rust-bin.fromRustupToolchainFile ../../rust-toolchain.toml;
+      rust-toolchain = pkgs.rust-bin.fromRustupToolchainFile ../rust-toolchain.toml;
       lefthook-check = inputs.lefthook-nix.lib.${system}.run {
         src = self;
         config = {
