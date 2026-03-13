@@ -55,34 +55,6 @@
           "x86_64-darwin"
           "aarch64-darwin"
         ];
-
-        flake.overlays.default = final: prev: {
-          walltime-cli = inputs.self.packages.${final.stdenv.hostPlatform.system}.default;
-        };
-
-        perSystem =
-          { pkgs, system, ... }:
-          let
-            cargoNix = inputs.crate2nix.tools.${system}.appliedCargoNix {
-              name = "walltime";
-              src = ./.;
-            };
-          in
-          {
-            checks = {
-              walltime-core = cargoNix.workspaceMembers.walltime-core.build;
-              walltime-cli = cargoNix.workspaceMembers.walltime-cli.build;
-            };
-
-            packages = {
-              default = cargoNix.workspaceMembers.walltime-cli.build;
-            };
-
-            apps.default = {
-              type = "app";
-              program = "${cargoNix.workspaceMembers.walltime-cli.build}/bin/wtime";
-            };
-          };
       }
     );
 }
