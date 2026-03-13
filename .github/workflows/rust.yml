@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    tags:
+      - 'v*'
   pull_request:
     branches:
       - main
@@ -16,14 +18,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1, 2025-12-02
 
-      - uses: nixbuild/nix-quick-install-action@2c9db80fb984ceb1bcaa77cdda3fdf8cfba83c7b # v34, 2025-09-24
+      - uses: nixbuild/nix-quick-install-action@2c9db80fb984ceb1bcaa77cdda3fdf8cfba92035 # v34, 2025-09-24
         with:
           nix_conf: |
             keep-env-derivations = true
             keep-outputs = true
 
       - name: Restore and save Nix store
-        uses: nix-community/cache-nix-action@106bba72ed8e29c8357661199511ef07790175e9 # v7, 2026-01-08
+        uses: nix-community/cache-nix-action@7df957e333c1e5da7721f60227dbba6d06080569 # v7, 2026-01-08
         with:
           primary-key: nix-${{ runner.os }}-${{ hashFiles('**/*.nix', '**/flake.lock') }}
           restore-prefixes-first-match: nix-${{ runner.os }}-
@@ -51,3 +53,16 @@ jobs:
 
       - name: Build
         run: nix develop -c just build
+
+      - name: Package check
+        run: nix develop -c cargo package --workspace
+
+      - name: Publish to crates.io
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: nix develop -c cargo publish --package walltime-core --token "${{ secrets.CRATES_IO_TOKEN }}"
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2.5.0, 2025-12-01
+        with:
+          generate_release_notes: true
