@@ -45,6 +45,7 @@
           }
         ];
 
+        devshell.motd = "";
         devshell.startup.lefthook.text = lefthook-check.shellHook;
       };
     };

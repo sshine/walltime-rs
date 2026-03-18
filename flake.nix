@@ -1,13 +1,6 @@
 {
   description = "A library and CLI for measuring time spent in a process";
 
-  nixConfig = {
-    extra-substituters = [ "https://crate2nix.cachix.org" ];
-    extra-trusted-public-keys = [
-      "crate2nix.cachix.org-1:bXMeMOBI39htMnFaFj5MkBczuNKDfTwBBzHbPmcJ+lE="
-    ];
-  };
-
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     flake-parts.url = "github:hercules-ci/flake-parts";
