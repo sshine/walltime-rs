@@ -46,3 +46,6 @@ tempfile = "3"
 
 # CLI
 clap = { version = "4", features = ["derive"] }
+
+# Signal handling
+ctrlc = "3"

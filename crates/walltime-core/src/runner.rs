@@ -142,7 +142,17 @@ pub async fn run(config: RunConfig) -> Result<RunResult> {
     Ok(RunResult {
         total,
         phases,
-        exit_code: status.code(),
+        exit_code: status.code().or_else(|| {
+            #[cfg(unix)]
+            {
+                use std::os::unix::process::ExitStatusExt;
+                status.signal().map(|sig| 128 + sig)
+            }
+            #[cfg(not(unix))]
+            {
+                None
+            }
+        }),
         started_at,
     })
 }

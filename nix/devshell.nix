@@ -28,6 +28,7 @@
           config.treefmt.build.wrapper
           pkgs.cargo-watch
           pkgs.cargo-insta
+          pkgs.stdenv.cc
         ];
 
         env = [

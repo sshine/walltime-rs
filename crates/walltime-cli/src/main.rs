@@ -4,6 +4,7 @@ mod args;
 
 use std::path::Path;
 use std::process::ExitCode;
+use std::sync::atomic::{AtomicBool, Ordering};
 
 use clap::Parser;
 use owo_colors::OwoColorize;
@@ -17,6 +18,16 @@ use args::Args;
 
 #[tokio::main]
 async fn main() -> ExitCode {
+    // Intercept Ctrl+C so the child process dies but the parent survives to print the summary.
+    // Second Ctrl+C force-exits with code 130.
+    static INTERRUPTED: AtomicBool = AtomicBool::new(false);
+    ctrlc::set_handler(move || {
+        if INTERRUPTED.swap(true, Ordering::SeqCst) {
+            std::process::exit(130);
+        }
+    })
+    .expect("failed to set Ctrl+C handler");
+
     let args = Args::parse();
 
     // Parse phase definitions

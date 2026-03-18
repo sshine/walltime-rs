@@ -21,3 +21,4 @@ tracing.workspace = true
 clap.workspace = true
 tokio.workspace = true
 owo-colors.workspace = true
+ctrlc.workspace = true
