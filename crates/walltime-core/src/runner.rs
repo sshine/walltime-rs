@@ -7,7 +7,7 @@ use tokio::io::{AsyncBufReadExt, BufReader};
 use tokio::process::Command;
 
 use crate::Result;
-use crate::phase::{PhaseDefinition, PhaseTracker};
+use crate::phase::{DynamicPhaseDefinition, PhaseDefinition, PhaseTracker};
 use crate::summary::{PhaseTiming, RunResult};
 use crate::timestamp::format_timestamp;
 
@@ -25,6 +25,8 @@ pub struct RunConfig {
     pub from_zero: bool,
     /// Phase definitions for tracking.
     pub phase_definitions: Vec<PhaseDefinition>,
+    /// Dynamic phase definitions for tracking.
+    pub dynamic_phase_definitions: Vec<DynamicPhaseDefinition>,
     /// Whether to set env vars that force color output in the child process.
     pub force_color: bool,
 }
@@ -81,7 +83,8 @@ pub async fn run(config: RunConfig) -> Result<RunResult> {
 
     let mut stdout_reader = BufReader::new(stdout).lines();
     let mut stderr_reader = BufReader::new(stderr).lines();
-    let mut phase_tracker = PhaseTracker::new(config.phase_definitions);
+    let mut phase_tracker =
+        PhaseTracker::new(config.phase_definitions, config.dynamic_phase_definitions);
 
     loop {
         tokio::select! {

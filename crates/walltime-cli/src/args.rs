@@ -26,6 +26,14 @@ pub struct Args {
     #[arg(short = 'p', long = "phase", value_name = "NAME=REGEX")]
     pub phases: Vec<String>,
 
+    /// Regex with a capture group for dynamic phase names (repeatable).
+    #[arg(short = 'd', long = "dynamic-phase", value_name = "REGEX")]
+    pub dynamic_phases: Vec<String>,
+
+    /// Hide phases shorter than this threshold in the summary (seconds).
+    #[arg(long = "min-phase", value_name = "SECONDS", default_value = "0")]
+    pub min_phase: f64,
+
     /// Suppress the timing summary.
     #[arg(long = "no-summary")]
     pub no_summary: bool,

@@ -30,11 +30,26 @@ pub struct PhaseTiming {
 }
 
 /// Format the summary block (without colors).
-pub fn format_summary(result: &RunResult, history: &[HistoryEntry], command: &[String]) -> String {
+///
+/// `min_phase_duration` filters phases from the display only; it does not
+/// affect history storage.
+pub fn format_summary(
+    result: &RunResult,
+    history: &[HistoryEntry],
+    command: &[String],
+    min_phase_duration: Duration,
+) -> String {
     let mut out = String::new();
 
+    // Filter phases for display
+    let display_phases: Vec<&PhaseTiming> = result
+        .phases
+        .iter()
+        .filter(|p| p.duration >= min_phase_duration)
+        .collect();
+
     // Determine the width of the box
-    let has_phases = !result.phases.is_empty();
+    let has_phases = !display_phases.is_empty();
     let has_history = history.len() > 1;
 
     let min_width = if has_history { 50 } else { 30 };
@@ -50,13 +65,12 @@ pub fn format_summary(result: &RunResult, history: &[HistoryEntry], command: &[S
         let _ = writeln!(out);
         let _ = writeln!(out, "  Phases:");
         let total_secs = result.total.as_secs_f64();
-        let max_name_len = result
-            .phases
+        let max_name_len = display_phases
             .iter()
             .map(|p| p.name.len())
             .max()
             .unwrap_or(0);
-        for phase in &result.phases {
+        for phase in &display_phases {
             let pct = if total_secs > 0.0 {
                 phase.duration.as_secs_f64() / total_secs * 100.0
             } else {

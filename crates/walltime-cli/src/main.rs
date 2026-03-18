@@ -10,7 +10,7 @@ use clap::Parser;
 use owo_colors::OwoColorize;
 
 use walltime_core::history::{self, HistoryEntry, PhaseTime};
-use walltime_core::phase::PhaseDefinition;
+use walltime_core::phase::{DynamicPhaseDefinition, PhaseDefinition};
 use walltime_core::runner::{self, RunConfig};
 use walltime_core::summary;
 
@@ -44,6 +44,22 @@ async fn main() -> ExitCode {
         }
     };
 
+    // Parse dynamic phase definitions
+    let dynamic_phase_definitions: Vec<DynamicPhaseDefinition> = match args
+        .dynamic_phases
+        .iter()
+        .map(|s| DynamicPhaseDefinition::parse(s))
+        .collect::<walltime_core::Result<Vec<_>>>()
+    {
+        Ok(defs) => defs,
+        Err(e) => {
+            eprintln!("{}: {e}", "error".red().bold());
+            return ExitCode::from(2);
+        }
+    };
+
+    let min_phase_duration = std::time::Duration::from_secs_f64(args.min_phase);
+
     // Build run config
     let command = args.command[0].clone();
     let cmd_args = args.command[1..].to_vec();
@@ -61,6 +77,7 @@ async fn main() -> ExitCode {
         timestamp_format: args.timestamp_format.clone(),
         from_zero: args.from_zero,
         phase_definitions,
+        dynamic_phase_definitions,
         force_color,
     };
 
@@ -117,7 +134,8 @@ async fn main() -> ExitCode {
 
     // Print summary
     if !args.no_summary {
-        let summary_text = summary::format_summary(&result, &history, &args.command);
+        let summary_text =
+            summary::format_summary(&result, &history, &args.command, min_phase_duration);
 
         let use_color = match args.color {
             args::ColorChoice::Always => true,
