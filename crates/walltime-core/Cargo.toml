@@ -16,6 +16,8 @@ serde_json.workspace = true
 tracing.workspace = true
 tokio.workspace = true
 regex.workspace = true
+strip-ansi-escapes.workspace = true
+terminal_size.workspace = true
 chrono.workspace = true
 
 [dev-dependencies]

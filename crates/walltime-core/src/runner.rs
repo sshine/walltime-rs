@@ -91,14 +91,16 @@ pub async fn run(config: RunConfig) -> Result<RunResult> {
             line = stdout_reader.next_line() => {
                 match line? {
                     Some(line) => {
-                        phase_tracker.process_line(&line, Instant::now());
+                        let stripped = strip_ansi_escapes::strip_str(&line);
+                        phase_tracker.process_line(&stripped, Instant::now());
                         let mut out = std::io::stdout().lock();
                         write_line(&mut out, &line, config.timestamps, &config.timestamp_format, config.from_zero, start)?;
                     }
                     None => {
                         // stdout closed, drain stderr
                         while let Some(line) = stderr_reader.next_line().await? {
-                            phase_tracker.process_line(&line, Instant::now());
+                            let stripped = strip_ansi_escapes::strip_str(&line);
+                            phase_tracker.process_line(&stripped, Instant::now());
                             let mut err = std::io::stderr().lock();
                             write_line(&mut err, &line, config.timestamps, &config.timestamp_format, config.from_zero, start)?;
                         }
@@ -109,14 +111,16 @@ pub async fn run(config: RunConfig) -> Result<RunResult> {
             line = stderr_reader.next_line() => {
                 match line? {
                     Some(line) => {
-                        phase_tracker.process_line(&line, Instant::now());
+                        let stripped = strip_ansi_escapes::strip_str(&line);
+                        phase_tracker.process_line(&stripped, Instant::now());
                         let mut err = std::io::stderr().lock();
                         write_line(&mut err, &line, config.timestamps, &config.timestamp_format, config.from_zero, start)?;
                     }
                     None => {
                         // stderr closed, drain stdout
                         while let Some(line) = stdout_reader.next_line().await? {
-                            phase_tracker.process_line(&line, Instant::now());
+                            let stripped = strip_ansi_escapes::strip_str(&line);
+                            phase_tracker.process_line(&stripped, Instant::now());
                             let mut out = std::io::stdout().lock();
                             write_line(&mut out, &line, config.timestamps, &config.timestamp_format, config.from_zero, start)?;
                         }

@@ -4,8 +4,17 @@ use chrono::{DateTime, Local};
 use std::fmt::Write;
 use std::time::Duration;
 
+use terminal_size::{Width, terminal_size};
+
 use crate::history::HistoryEntry;
 use crate::timestamp::format_duration;
+
+/// Return the terminal width, falling back to 80 columns.
+fn term_width() -> usize {
+    terminal_size()
+        .map(|(Width(w), _)| w as usize)
+        .unwrap_or(80)
+}
 
 /// Result of a completed run.
 #[derive(Debug)]
@@ -65,21 +74,35 @@ pub fn format_summary(
         let _ = writeln!(out);
         let _ = writeln!(out, "  Phases:");
         let total_secs = result.total.as_secs_f64();
+        let dur_w = display_phases
+            .iter()
+            .map(|p| format_duration(p.duration).len())
+            .max()
+            .unwrap_or(0);
+        // "    " (4) + name + "  " (2) + duration + "  (100.0%)" (10)
+        let suffix_len = 4 + 2 + dur_w + 10;
+        let name_budget = term_width().saturating_sub(suffix_len);
         let max_name_len = display_phases
             .iter()
             .map(|p| p.name.len())
             .max()
-            .unwrap_or(0);
+            .unwrap_or(0)
+            .min(name_budget);
         for phase in &display_phases {
             let pct = if total_secs > 0.0 {
                 phase.duration.as_secs_f64() / total_secs * 100.0
             } else {
                 0.0
             };
+            let name = if phase.name.len() > max_name_len {
+                format!("{}…", &phase.name[..max_name_len - 1])
+            } else {
+                phase.name.clone()
+            };
             let _ = writeln!(
                 out,
                 "    {:<width$}  {}  ({:.1}%)",
-                phase.name,
+                name,
                 format_duration(phase.duration),
                 pct,
                 width = max_name_len,
@@ -103,25 +126,15 @@ pub fn format_summary(
     out
 }
 
-/// Format the history comparison table.
+/// Format the history comparison table (total time only, no per-phase breakdown).
 fn format_history_table(out: &mut String, history: &[HistoryEntry], command: &[String]) {
     let cmd_str = command.join(" ");
     let _ = writeln!(out, "  History: {cmd_str} (last {} runs)", history.len());
 
-    // Collect all unique phase names in order
-    let mut phase_names: Vec<String> = Vec::new();
-    for entry in history {
-        for phase in &entry.phases {
-            if !phase_names.contains(&phase.name) {
-                phase_names.push(phase.name.clone());
-            }
-        }
-    }
-
     // Helper to format ms as duration string
     let fmt_ms = |ms: u64| -> String { format_duration(Duration::from_millis(ms)) };
 
-    // Column widths - compute from actual data so the table never overflows
+    // Column widths
     let run_w = 3.max(history.len().to_string().len());
     let date_w = 12;
     let total_w = "Total".len().max(
@@ -131,24 +144,6 @@ fn format_history_table(out: &mut String, history: &[HistoryEntry], command: &[S
             .max()
             .unwrap_or(0),
     );
-    let phase_ws: Vec<usize> = phase_names
-        .iter()
-        .map(|name| {
-            let header_w = name.len();
-            let data_w = history
-                .iter()
-                .map(|e| {
-                    e.phases
-                        .iter()
-                        .find(|p| &p.name == name)
-                        .map(|p| fmt_ms(p.duration_ms).len())
-                        .unwrap_or(0)
-                })
-                .max()
-                .unwrap_or(0);
-            header_w.max(data_w)
-        })
-        .collect();
 
     // Top border
     let _ = write!(out, "  \u{250c}");
@@ -157,10 +152,6 @@ fn format_history_table(out: &mut String, history: &[HistoryEntry], command: &[S
     let _ = write!(out, "\u{2500}{}\u{2500}", "\u{2500}".repeat(date_w));
     let _ = write!(out, "\u{252c}");
     let _ = write!(out, "\u{2500}{}\u{2500}", "\u{2500}".repeat(total_w));
-    for w in &phase_ws {
-        let _ = write!(out, "\u{252c}");
-        let _ = write!(out, "\u{2500}{}\u{2500}", "\u{2500}".repeat(*w));
-    }
     let _ = writeln!(out, "\u{2510}");
 
     // Header
@@ -170,10 +161,6 @@ fn format_history_table(out: &mut String, history: &[HistoryEntry], command: &[S
     let _ = write!(out, " {:>date_w$} ", "Date");
     let _ = write!(out, "\u{2502}");
     let _ = write!(out, " {:>total_w$} ", "Total");
-    for (i, name) in phase_names.iter().enumerate() {
-        let _ = write!(out, "\u{2502}");
-        let _ = write!(out, " {:>width$} ", name, width = phase_ws[i]);
-    }
     let _ = writeln!(out, "\u{2502}");
 
     // Header separator
@@ -183,10 +170,6 @@ fn format_history_table(out: &mut String, history: &[HistoryEntry], command: &[S
     let _ = write!(out, "\u{2500}{}\u{2500}", "\u{2500}".repeat(date_w));
     let _ = write!(out, "\u{253c}");
     let _ = write!(out, "\u{2500}{}\u{2500}", "\u{2500}".repeat(total_w));
-    for w in &phase_ws {
-        let _ = write!(out, "\u{253c}");
-        let _ = write!(out, "\u{2500}{}\u{2500}", "\u{2500}".repeat(*w));
-    }
     let _ = writeln!(out, "\u{2524}");
 
     // Data rows
@@ -202,16 +185,6 @@ fn format_history_table(out: &mut String, history: &[HistoryEntry], command: &[S
         let _ = write!(out, " {:<date_w$} ", date_str);
         let _ = write!(out, "\u{2502}");
         let _ = write!(out, " {:>total_w$} ", fmt_ms(entry.total_duration_ms));
-        for (j, name) in phase_names.iter().enumerate() {
-            let _ = write!(out, "\u{2502}");
-            let phase_ms = entry
-                .phases
-                .iter()
-                .find(|p| &p.name == name)
-                .map(|p| p.duration_ms)
-                .unwrap_or(0);
-            let _ = write!(out, " {:>width$} ", fmt_ms(phase_ms), width = phase_ws[j]);
-        }
         let _ = write!(out, "\u{2502}");
         if is_current {
             let _ = write!(out, " \u{2190} current");
@@ -226,9 +199,5 @@ fn format_history_table(out: &mut String, history: &[HistoryEntry], command: &[S
     let _ = write!(out, "\u{2500}{}\u{2500}", "\u{2500}".repeat(date_w));
     let _ = write!(out, "\u{2534}");
     let _ = write!(out, "\u{2500}{}\u{2500}", "\u{2500}".repeat(total_w));
-    for w in &phase_ws {
-        let _ = write!(out, "\u{2534}");
-        let _ = write!(out, "\u{2500}{}\u{2500}", "\u{2500}".repeat(*w));
-    }
     let _ = writeln!(out, "\u{2518}");
 }
