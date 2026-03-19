@@ -808,6 +808,7 @@ version = "0.1.0"
 dependencies = [
  "chrono",
  "insta",
+ "owo-colors",
  "regex",
  "serde",
  "serde_json",

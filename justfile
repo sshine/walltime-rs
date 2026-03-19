@@ -2,6 +2,12 @@
 default:
     @just --list
 
+eval:
+    cargo build
+    cp target/debug/wtime .
+    cargo clean
+    ./wtime -t -0 -d "Compiling (.*)" -m 1 cargo build
+
 # Format all code (Rust + Nix)
 fmt:
     treefmt

@@ -19,6 +19,7 @@ regex.workspace = true
 strip-ansi-escapes.workspace = true
 terminal_size.workspace = true
 chrono.workspace = true
+owo-colors.workspace = true
 
 [dev-dependencies]
 insta.workspace = true

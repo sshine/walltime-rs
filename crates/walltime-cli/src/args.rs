@@ -1,6 +1,6 @@
 //! CLI argument definitions.
 
-use clap::{Parser, ValueEnum};
+use clap::Parser;
 use walltime_core::timestamp::DEFAULT_FORMAT;
 
 /// A modern replacement for the UNIX `time` command.
@@ -31,7 +31,12 @@ pub struct Args {
     pub dynamic_phases: Vec<String>,
 
     /// Hide phases shorter than this threshold in the summary (seconds).
-    #[arg(long = "min-phase", value_name = "SECONDS", default_value = "0")]
+    #[arg(
+        short = 'm',
+        long = "min-phase",
+        value_name = "SECONDS",
+        default_value = "0"
+    )]
     pub min_phase: f64,
 
     /// Suppress the timing summary.
@@ -46,22 +51,11 @@ pub struct Args {
     #[arg(long = "log-file", default_value = ".walltime.jsonl")]
     pub log_file: String,
 
-    /// When to use colors.
-    #[arg(long = "color", default_value = "auto")]
-    pub color: ColorChoice,
+    /// Show all runs in history (by default, only matching-outcome runs are shown).
+    #[arg(short = 'a', long = "show-all")]
+    pub show_all: bool,
 
     /// Command to run.
     #[arg(trailing_var_arg = true, required = true)]
     pub command: Vec<String>,
-}
-
-/// Color output choice for CLI.
-#[derive(Debug, Clone, Copy, ValueEnum)]
-pub enum ColorChoice {
-    /// Automatically detect terminal support.
-    Auto,
-    /// Always use colors.
-    Always,
-    /// Never use colors.
-    Never,
 }

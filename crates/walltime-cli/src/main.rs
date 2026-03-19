@@ -64,11 +64,7 @@ async fn main() -> ExitCode {
     let command = args.command[0].clone();
     let cmd_args = args.command[1..].to_vec();
 
-    let force_color = match args.color {
-        args::ColorChoice::Always => true,
-        args::ColorChoice::Never => false,
-        args::ColorChoice::Auto => std::io::IsTerminal::is_terminal(&std::io::stdout()),
-    };
+    let stdout_is_tty = std::io::IsTerminal::is_terminal(&std::io::stdout());
 
     let config = RunConfig {
         command: command.clone(),
@@ -78,7 +74,9 @@ async fn main() -> ExitCode {
         from_zero: args.from_zero,
         phase_definitions,
         dynamic_phase_definitions,
-        force_color,
+        force_color: stdout_is_tty,
+        min_phase_duration,
+        color_output: stdout_is_tty,
     };
 
     // Run the command
@@ -134,16 +132,15 @@ async fn main() -> ExitCode {
 
     // Print summary
     if !args.no_summary {
-        let summary_text =
-            summary::format_summary(&result, &history, &args.command, min_phase_duration);
+        let summary_text = summary::format_summary(
+            &result,
+            &history,
+            &args.command,
+            min_phase_duration,
+            args.show_all,
+        );
 
-        let use_color = match args.color {
-            args::ColorChoice::Always => true,
-            args::ColorChoice::Never => false,
-            args::ColorChoice::Auto => atty_check(),
-        };
-
-        if use_color {
+        if atty_check() {
             eprint!("{}", summary_text.dimmed());
         } else {
             eprint!("{summary_text}");
