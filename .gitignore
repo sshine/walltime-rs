@@ -1,7 +1,7 @@
 # Rust
 /target/
 *.snap
-walltime-cli
+/wtime
 
 # Nix
 /.direnv/
@@ -21,6 +21,10 @@ Thumbs.db
 # Editor backups
 *~
 \#*\#
+.*.swp
 
 # Agentic
 .claude/
+
+# This application
+.walltime.jsonl
