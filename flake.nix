@@ -17,10 +17,10 @@
       inputs.flake-compat.follows = "crate2nix/crate2nix_stable/flake-compat";
       inputs.nix-test-runner.follows = "crate2nix/crate2nix_stable/nix-test-runner";
       inputs.pre-commit-hooks.follows = "crate2nix/crate2nix_stable/pre-commit-hooks";
-      inputs.crate2nix_stable.inputs.nixpkgs.follows = "nixpkgs";
-      inputs.crate2nix_stable.inputs.devshell.follows = "devshell";
-      inputs.crate2nix_stable.inputs.flake-parts.follows = "flake-parts";
-      inputs.crate2nix_stable.inputs.cachix.inputs.nixpkgs.follows = "nixpkgs";
+      # inputs.crate2nix_stable.inputs.nixpkgs.follows = "nixpkgs";
+      # inputs.crate2nix_stable.inputs.devshell.follows = "devshell";
+      # inputs.crate2nix_stable.inputs.flake-parts.follows = "flake-parts";
+      # inputs.crate2nix_stable.inputs.cachix.inputs.nixpkgs.follows = "nixpkgs";
     };
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
