@@ -29,6 +29,7 @@
           pkgs.cargo-watch
           pkgs.cargo-insta
           pkgs.stdenv.cc
+          pkgs.just
         ];
 
         env = [
