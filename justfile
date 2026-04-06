@@ -32,12 +32,18 @@ test-verbose:
 build:
     cargo build --release --all-features
 
-# Generate documentation (opens in browser unless $CI is set)
-doc:
-    cargo doc --no-deps --all-features {{ if env("CI", "") != "" { "" } else { "--open" } }}
+# Generate documentation
+doc *args='':
+    cargo doc --no-deps --all-features {{args}}
+
+readme:
+    cargo-readme-workspace
+
+readme-check:
+    cargo-readme-workspace --check
 
 # Run CI checks locally
-ci: fmt-check lint test doc build
+ci: fmt-check lint test doc readme-check build
     @echo "All CI checks passed!"
 
 # Watch for changes and run tests

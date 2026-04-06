@@ -55,7 +55,17 @@
 //! ...
 //! ```
 //!
-//! Timestamp format can be modified with `-f`.
+//! Timestamp format can be modified with `-f <format>`, e.g. UNIX epoch with milliseconds:
+//!
+//! ```text
+//! $ wtime -t -0 -f '%s%.3f' cargo build
+//! [946684800.090]    Compiling proc-macro2 v1.0.106
+//! ...
+//! [946684801.881]    Compiling errno v0.3.14
+//! ...
+//! [946684807.345]     Finished `dev` profile in 7.33s
+//! ...
+//! ```
 //!
 //! ## Zero timestamps
 //!
@@ -90,6 +100,8 @@
 //! ```
 //!
 //! This helps track what part of a very verbose output is taking a long time.
+//!
+//! Before matching the regex, all ANSI codes are stripped from the string.
 //!
 //! To hide phases that take shorter than some amount of seconds, use `-m N` to focus on the slow ones:
 //!

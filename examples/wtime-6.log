@@ -1,0 +1,88 @@
+$ wtime -t -0 -f %s%.3f' cargo build
+[946684800.090]    Compiling proc-macro2 v1.0.106
+[946684800.090]    Compiling quote v1.0.45
+[946684800.090]    Compiling unicode-ident v1.0.24
+[946684800.090]    Compiling libc v0.2.183
+[946684800.090]    Compiling memchr v2.8.0
+[946684800.090]    Compiling serde_core v1.0.228
+[946684800.090]    Compiling autocfg v1.5.0
+[946684800.090]    Compiling bitflags v2.11.0
+[946684800.090]    Compiling zmij v1.0.21
+[946684800.092]    Compiling cfg_aliases v0.2.1
+[946684800.093]    Compiling rustix v1.1.4
+[946684800.093]    Compiling serde v1.0.228
+[946684800.126]    Compiling utf8parse v0.2.2
+[946684800.138]    Compiling nix v0.31.2
+[946684800.165]    Compiling anstyle-parse v0.2.7
+[946684800.276]    Compiling thiserror v2.0.18
+[946684800.293]    Compiling colorchoice v1.0.4
+[946684800.314]    Compiling owo-colors v4.3.0
+[946684800.318]    Compiling anstyle v1.0.13
+[946684800.329]    Compiling once_cell v1.21.3
+[946684800.347]    Compiling is_terminal_polyfill v1.70.2
+[946684800.378]    Compiling linux-raw-sys v0.12.1
+[946684800.441]    Compiling serde_json v1.0.149
+[946684800.452]    Compiling pin-project-lite v0.2.17
+[946684800.474]    Compiling num-traits v0.2.19
+[946684800.482]    Compiling anstyle-query v1.1.5
+[946684800.493]    Compiling regex-syntax v0.8.10
+[946684800.514]    Compiling tracing-core v0.1.36
+[946684800.527]    Compiling anstream v0.6.21
+[946684800.559]    Compiling iana-time-zone v0.1.65
+[946684800.565]    Compiling aho-corasick v1.1.4
+[946684800.825]    Compiling vte v0.14.1
+[946684800.880]    Compiling itoa v1.0.17
+[946684800.897]    Compiling syn v2.0.117
+[946684800.904]    Compiling heck v0.5.0
+[946684800.931]    Compiling bytes v1.11.1
+[946684800.945]    Compiling cfg-if v1.0.4
+[946684800.961]    Compiling clap_lex v1.0.0
+[946684800.979]    Compiling strsim v0.11.1
+[946684801.092]    Compiling strip-ansi-escapes v0.2.1
+[946684801.158]    Compiling clap_builder v4.5.60
+[946684801.223]    Compiling terminal_size v0.4.3
+[946684801.881]    Compiling errno v0.3.14
+[946684801.881]    Compiling mio v1.1.1
+[946684801.897]    Compiling regex-automata v0.4.14
+[946684801.945]    Compiling signal-hook-registry v1.4.8
+[946684802.480]    Compiling ctrlc v3.5.2
+[946684803.052]    Compiling regex v1.12.3
+[946684804.182]    Compiling serde_derive v1.0.228
+[946684804.183]    Compiling tokio-macros v2.6.1
+[946684804.183]    Compiling thiserror-impl v2.0.18
+[946684804.183]    Compiling tracing-attributes v0.1.31
+[946684804.183]    Compiling clap_derive v4.5.55
+[946684804.607]    Compiling tokio v1.50.0
+[946684804.665]    Compiling tracing v0.1.44
+[946684805.054]    Compiling clap v4.5.60
+[946684805.841]    Compiling chrono v0.4.44
+[946684806.406]    Compiling walltime-core v0.1.0 (/home/sshine/Projects/nursery/walltime-rs/crates/walltime-core)
+[946684806.819]    Compiling walltime-cli v0.1.0 (/home/sshine/Projects/nursery/walltime-rs/crates/walltime-cli)
+[946684807.345]     Finished `dev` profile [unoptimized + debuginfo] target(s) in 7.33s
+
+──────────────────────────────────────────────────
+  walltime summary
+──────────────────────────────────────────────────
+  Total:      7.357s
+
+  History: cargo build (last 13 runs)
+  ┌─────┬──────────────┬────────┬──────┐
+  │ Run │         Date │  Total │ Exit │
+  ├─────┼──────────────┼────────┼──────┤
+  │  #1 │ Apr 06 14:42 │ 7.615s │    0 │
+  │  #2 │ Apr 06 14:42 │ 7.189s │    0 │
+  │  #3 │ Apr 06 14:43 │ 7.490s │    0 │
+  │  #4 │ Apr 06 14:43 │ 7.792s │    0 │
+  │  #5 │ Apr 06 14:45 │ 7.656s │    0 │
+  │  #6 │ Apr 06 14:46 │ 7.328s │    0 │
+  │  #7 │ Apr 06 14:47 │ 6.872s │    0 │
+  │  #8 │ Apr 06 14:48 │ 7.030s │    0 │
+  │  #9 │ Apr 06 14:50 │ 7.142s │    0 │
+  │ #10 │ Apr 06 14:51 │ 7.366s │    0 │
+  │ #11 │ Apr 06 14:51 │ 7.399s │    0 │
+  │ #12 │ Apr 06 15:37 │ 6.692s │    0 │
+  │ #13 │ Apr 06 15:37 │ 7.356s │    0 │ ← current
+  └─────┴──────────────┴────────┴──────┘
+
+  Exit code:  0
+──────────────────────────────────────────────────
