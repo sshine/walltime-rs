@@ -1,0 +1,91 @@
+$ wtime -t -0 -d 'Compiling ([^ ]*)' -m 1 cargo build
+[00:00:00.084]    Compiling proc-macro2 v1.0.106
+[00:00:00.084]    Compiling unicode-ident v1.0.24
+[00:00:00.084]    Compiling quote v1.0.45
+[00:00:00.084]    Compiling libc v0.2.183
+[00:00:00.084]    Compiling memchr v2.8.0
+[00:00:00.084]    Compiling serde_core v1.0.228
+[00:00:00.084]    Compiling autocfg v1.5.0
+[00:00:00.084]    Compiling bitflags v2.11.0
+[00:00:00.084]    Compiling rustix v1.1.4
+[00:00:00.086]    Compiling utf8parse v0.2.2
+[00:00:00.087]    Compiling serde v1.0.228
+[00:00:00.089]    Compiling cfg_aliases v0.2.1
+[00:00:00.124]    Compiling zmij v1.0.21
+[00:00:00.126]    Compiling nix v0.31.2
+[00:00:00.134]    Compiling anstyle-parse v0.2.7
+[00:00:00.272]    Compiling thiserror v2.0.18
+[00:00:00.276]    Compiling anstyle-query v1.1.5
+[00:00:00.289]    Compiling pin-project-lite v0.2.17
+[00:00:00.304]    Compiling is_terminal_polyfill v1.70.2
+[00:00:00.317]    Compiling linux-raw-sys v0.12.1
+[00:00:00.326]    Compiling regex-syntax v0.8.10
+[00:00:00.327]    Compiling colorchoice v1.0.4
+[00:00:00.327]    Compiling owo-colors v4.3.0
+[00:00:00.374]    Compiling once_cell v1.21.3
+[00:00:00.405]    Compiling anstyle v1.0.13
+[00:00:00.477]    Compiling num-traits v0.2.19
+[00:00:00.498]    Compiling serde_json v1.0.149
+[00:00:00.516]    Compiling anstream v0.6.21
+[00:00:00.550]    Compiling itoa v1.0.17
+[00:00:00.596]    Compiling aho-corasick v1.1.4
+[00:00:00.632]    Compiling tracing-core v0.1.36
+[00:00:00.661]    Compiling vte v0.14.1
+[00:00:00.741]    Compiling cfg-if v1.0.4
+[00:00:00.758]    Compiling iana-time-zone v0.1.65
+[00:00:00.764]    Compiling strsim v0.11.1
+[00:00:00.824]    Compiling clap_lex v1.0.0
+[00:00:00.963]    Compiling heck v0.5.0
+[00:00:01.043]    Compiling bytes v1.11.1
+[00:00:01.057]    Compiling syn v2.0.117
+[00:00:01.150]    Compiling terminal_size v0.4.3
+[00:00:01.164]    Compiling clap_builder v4.5.60
+[00:00:01.200]    Compiling strip-ansi-escapes v0.2.1
+[00:00:01.817]    Compiling errno v0.3.14
+[00:00:01.818]    Compiling mio v1.1.1
+[00:00:01.935]    Compiling signal-hook-registry v1.4.8
+[00:00:02.073]    Compiling regex-automata v0.4.14
+[00:00:02.249]    Compiling ctrlc v3.5.2
+[00:00:03.709]    Compiling regex v1.12.3
+[00:00:03.840]    Compiling serde_derive v1.0.228
+[00:00:03.840]    Compiling tokio-macros v2.6.1
+[00:00:03.840]    Compiling thiserror-impl v2.0.18
+[00:00:03.840]    Compiling tracing-attributes v0.1.31
+[00:00:03.840]    Compiling clap_derive v4.5.55
+[00:00:04.320]    Compiling tokio v1.50.0
+[00:00:04.603]    Compiling tracing v0.1.44
+[00:00:04.699]    Compiling clap v4.5.60
+[00:00:05.715]    Compiling chrono v0.4.44
+[00:00:06.303]    Compiling walltime-core v0.1.0 (/home/sshine/Projects/nursery/walltime-rs/crates/walltime-core)
+[00:00:06.834]    Compiling walltime-cli v0.1.0 (/home/sshine/Projects/nursery/walltime-rs/crates/walltime-cli)
+[00:00:07.387]     Finished `dev` profile [unoptimized + debuginfo] target(s) in 7.38s
+
+──────────────────────────────────────────────────
+  walltime summary
+──────────────────────────────────────────────────
+  Total:      7.399s
+
+  Phases:
+    ctrlc                 1.460s  (19.7%)
+    clap                  1.017s  (13.7%)
+    (57 phases < 1.000s)  4.838s  (65.4%)  0.085s avg
+
+  History: cargo build (last 11 runs)
+  ┌─────┬──────────────┬────────┬──────┐
+  │ Run │         Date │  Total │ Exit │
+  ├─────┼──────────────┼────────┼──────┤
+  │  #1 │ Apr 06 14:42 │ 7.615s │    0 │
+  │  #2 │ Apr 06 14:42 │ 7.189s │    0 │
+  │  #3 │ Apr 06 14:43 │ 7.490s │    0 │
+  │  #4 │ Apr 06 14:43 │ 7.792s │    0 │
+  │  #5 │ Apr 06 14:45 │ 7.656s │    0 │
+  │  #6 │ Apr 06 14:46 │ 7.328s │    0 │
+  │  #7 │ Apr 06 14:47 │ 6.872s │    0 │
+  │  #8 │ Apr 06 14:48 │ 7.030s │    0 │
+  │  #9 │ Apr 06 14:50 │ 7.142s │    0 │
+  │ #10 │ Apr 06 14:51 │ 7.366s │    0 │
+  │ #11 │ Apr 06 14:51 │ 7.399s │    0 │ ← current
+  └─────┴──────────────┴────────┴──────┘
+
+  Exit code:  0
+──────────────────────────────────────────────────

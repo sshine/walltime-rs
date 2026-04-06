@@ -1,0 +1,145 @@
+$ wtime -t -0 -d 'Compiling ([^ ]*)' cargo build
+[00:00:00.104]    Compiling proc-macro2 v1.0.106
+[00:00:00.104]    Compiling unicode-ident v1.0.24
+[00:00:00.104]    Compiling quote v1.0.45
+[00:00:00.104]    Compiling libc v0.2.183
+[00:00:00.104]    Compiling memchr v2.8.0
+[00:00:00.104]    Compiling serde_core v1.0.228
+[00:00:00.104]    Compiling autocfg v1.5.0
+[00:00:00.104]    Compiling bitflags v2.11.0
+[00:00:00.104]    Compiling serde v1.0.228
+[00:00:00.106]    Compiling utf8parse v0.2.2
+[00:00:00.106]    Compiling cfg_aliases v0.2.1
+[00:00:00.107]    Compiling zmij v1.0.21
+[00:00:00.168]    Compiling rustix v1.1.4
+[00:00:00.185]    Compiling anstyle-parse v0.2.7
+[00:00:00.192]    Compiling nix v0.31.2
+[00:00:00.299]    Compiling once_cell v1.21.3
+[00:00:00.327]    Compiling colorchoice v1.0.4
+[00:00:00.358]    Compiling is_terminal_polyfill v1.70.2
+[00:00:00.360]    Compiling owo-colors v4.3.0
+[00:00:00.371]    Compiling pin-project-lite v0.2.17
+[00:00:00.392]    Compiling regex-syntax v0.8.10
+[00:00:00.404]    Compiling anstyle v1.0.13
+[00:00:00.420]    Compiling thiserror v2.0.18
+[00:00:00.484]    Compiling serde_json v1.0.149
+[00:00:00.495]    Compiling anstyle-query v1.1.5
+[00:00:00.518]    Compiling linux-raw-sys v0.12.1
+[00:00:00.522]    Compiling anstream v0.6.21
+[00:00:00.543]    Compiling num-traits v0.2.19
+[00:00:00.551]    Compiling tracing-core v0.1.36
+[00:00:00.624]    Compiling bytes v1.11.1
+[00:00:00.652]    Compiling itoa v1.0.17
+[00:00:00.695]    Compiling aho-corasick v1.1.4
+[00:00:00.866]    Compiling vte v0.14.1
+[00:00:00.874]    Compiling clap_lex v1.0.0
+[00:00:01.025]    Compiling iana-time-zone v0.1.65
+[00:00:01.100]    Compiling syn v2.0.117
+[00:00:01.120]    Compiling heck v0.5.0
+[00:00:01.125]    Compiling strsim v0.11.1
+[00:00:01.252]    Compiling cfg-if v1.0.4
+[00:00:01.271]    Compiling clap_builder v4.5.60
+[00:00:01.304]    Compiling strip-ansi-escapes v0.2.1
+[00:00:01.432]    Compiling terminal_size v0.4.3
+[00:00:01.862]    Compiling errno v0.3.14
+[00:00:01.863]    Compiling mio v1.1.1
+[00:00:01.932]    Compiling signal-hook-registry v1.4.8
+[00:00:02.178]    Compiling ctrlc v3.5.2
+[00:00:02.196]    Compiling regex-automata v0.4.14
+[00:00:03.315]    Compiling serde_derive v1.0.228
+[00:00:03.315]    Compiling thiserror-impl v2.0.18
+[00:00:03.315]    Compiling tracing-attributes v0.1.31
+[00:00:03.315]    Compiling tokio-macros v2.6.1
+[00:00:03.315]    Compiling clap_derive v4.5.55
+[00:00:03.674]    Compiling tokio v1.50.0
+[00:00:04.023]    Compiling tracing v0.1.44
+[00:00:04.285]    Compiling regex v1.12.3
+[00:00:04.468]    Compiling clap v4.5.60
+[00:00:05.624]    Compiling chrono v0.4.44
+[00:00:06.162]    Compiling walltime-core v0.1.0 (/home/sshine/Projects/nursery/walltime-rs/crates/walltime-core)
+[00:00:06.642]    Compiling walltime-cli v0.1.0 (/home/sshine/Projects/nursery/walltime-rs/crates/walltime-cli)
+[00:00:07.133]     Finished `dev` profile [unoptimized + debuginfo] target(s) in 7.12s
+
+──────────────────────────────────────────────────
+  walltime summary
+──────────────────────────────────────────────────
+  Total:      7.142s
+
+  Phases:
+    proc-macro2           0.000s  (0.0%)
+    unicode-ident         0.000s  (0.0%)
+    quote                 0.000s  (0.0%)
+    libc                  0.000s  (0.0%)
+    memchr                0.000s  (0.0%)
+    serde_core            0.000s  (0.0%)
+    autocfg               0.000s  (0.0%)
+    bitflags              0.000s  (0.0%)
+    serde                 0.001s  (0.0%)
+    utf8parse             0.001s  (0.0%)
+    cfg_aliases           0.001s  (0.0%)
+    zmij                  0.061s  (0.9%)
+    rustix                0.017s  (0.2%)
+    anstyle-parse         0.007s  (0.1%)
+    nix                   0.107s  (1.5%)
+    once_cell             0.029s  (0.4%)
+    colorchoice           0.031s  (0.4%)
+    is_terminal_polyfill  0.002s  (0.0%)
+    owo-colors            0.011s  (0.2%)
+    pin-project-lite      0.021s  (0.3%)
+    regex-syntax          0.012s  (0.2%)
+    anstyle               0.016s  (0.2%)
+    thiserror             0.065s  (0.9%)
+    serde_json            0.011s  (0.2%)
+    anstyle-query         0.023s  (0.3%)
+    linux-raw-sys         0.004s  (0.1%)
+    anstream              0.021s  (0.3%)
+    num-traits            0.008s  (0.1%)
+    tracing-core          0.073s  (1.0%)
+    bytes                 0.028s  (0.4%)
+    itoa                  0.043s  (0.6%)
+    aho-corasick          0.171s  (2.4%)
+    vte                   0.008s  (0.1%)
+    clap_lex              0.151s  (2.1%)
+    iana-time-zone        0.074s  (1.0%)
+    syn                   0.020s  (0.3%)
+    heck                  0.005s  (0.1%)
+    strsim                0.128s  (1.8%)
+    cfg-if                0.019s  (0.3%)
+    clap_builder          0.033s  (0.5%)
+    strip-ansi-escapes    0.127s  (1.8%)
+    terminal_size         0.431s  (6.0%)
+    errno                 0.001s  (0.0%)
+    mio                   0.068s  (1.0%)
+    signal-hook-registry  0.246s  (3.4%)
+    ctrlc                 0.018s  (0.3%)
+    regex-automata        1.119s  (15.7%)
+    serde_derive          0.000s  (0.0%)
+    thiserror-impl        0.000s  (0.0%)
+    tracing-attributes    0.000s  (0.0%)
+    tokio-macros          0.000s  (0.0%)
+    clap_derive           0.359s  (5.0%)
+    tokio                 0.349s  (4.9%)
+    tracing               0.262s  (3.7%)
+    regex                 0.183s  (2.6%)
+    clap                  1.155s  (16.2%)
+    chrono                0.538s  (7.5%)
+    walltime-core         0.480s  (6.7%)
+    walltime-cli          0.500s  (7.0%)
+
+  History: cargo build (last 9 runs)
+  ┌─────┬──────────────┬────────┬──────┐
+  │ Run │         Date │  Total │ Exit │
+  ├─────┼──────────────┼────────┼──────┤
+  │  #1 │ Apr 06 14:42 │ 7.615s │    0 │
+  │  #2 │ Apr 06 14:42 │ 7.189s │    0 │
+  │  #3 │ Apr 06 14:43 │ 7.490s │    0 │
+  │  #4 │ Apr 06 14:43 │ 7.792s │    0 │
+  │  #5 │ Apr 06 14:45 │ 7.656s │    0 │
+  │  #6 │ Apr 06 14:46 │ 7.328s │    0 │
+  │  #7 │ Apr 06 14:47 │ 6.872s │    0 │
+  │  #8 │ Apr 06 14:48 │ 7.030s │    0 │
+  │  #9 │ Apr 06 14:50 │ 7.142s │    0 │ ← current
+  └─────┴──────────────┴────────┴──────┘
+
+  Exit code:  0
+──────────────────────────────────────────────────

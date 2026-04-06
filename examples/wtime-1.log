@@ -1,0 +1,81 @@
+$ wtime cargo build
+   Compiling proc-macro2 v1.0.106
+   Compiling unicode-ident v1.0.24
+   Compiling quote v1.0.45
+   Compiling libc v0.2.183
+   Compiling memchr v2.8.0
+   Compiling serde_core v1.0.228
+   Compiling autocfg v1.5.0
+   Compiling bitflags v2.11.0
+   Compiling cfg_aliases v0.2.1
+   Compiling utf8parse v0.2.2
+   Compiling rustix v1.1.4
+   Compiling serde v1.0.228
+   Compiling zmij v1.0.21
+   Compiling anstyle-parse v0.2.7
+   Compiling nix v0.31.2
+   Compiling anstyle v1.0.13
+   Compiling thiserror v2.0.18
+   Compiling serde_json v1.0.149
+   Compiling owo-colors v4.3.0
+   Compiling is_terminal_polyfill v1.70.2
+   Compiling anstyle-query v1.1.5
+   Compiling regex-syntax v0.8.10
+   Compiling linux-raw-sys v0.12.1
+   Compiling colorchoice v1.0.4
+   Compiling once_cell v1.21.3
+   Compiling num-traits v0.2.19
+   Compiling pin-project-lite v0.2.17
+   Compiling anstream v0.6.21
+   Compiling strsim v0.11.1
+   Compiling aho-corasick v1.1.4
+   Compiling tracing-core v0.1.36
+   Compiling vte v0.14.1
+   Compiling cfg-if v1.0.4
+   Compiling heck v0.5.0
+   Compiling clap_lex v1.0.0
+   Compiling bytes v1.11.1
+   Compiling iana-time-zone v0.1.65
+   Compiling itoa v1.0.17
+   Compiling syn v2.0.117
+   Compiling clap_builder v4.5.60
+   Compiling strip-ansi-escapes v0.2.1
+   Compiling terminal_size v0.4.3
+   Compiling errno v0.3.14
+   Compiling mio v1.1.1
+   Compiling signal-hook-registry v1.4.8
+   Compiling regex-automata v0.4.14
+   Compiling ctrlc v3.5.2
+   Compiling regex v1.12.3
+   Compiling serde_derive v1.0.228
+   Compiling tracing-attributes v0.1.31
+   Compiling thiserror-impl v2.0.18
+   Compiling tokio-macros v2.6.1
+   Compiling clap_derive v4.5.55
+   Compiling tokio v1.50.0
+   Compiling tracing v0.1.44
+   Compiling clap v4.5.60
+   Compiling chrono v0.4.44
+   Compiling walltime-core v0.1.0 (/home/sshine/Projects/nursery/walltime-rs/crates/walltime-core)
+   Compiling walltime-cli v0.1.0 (/home/sshine/Projects/nursery/walltime-rs/crates/walltime-cli)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 7.31s
+
+──────────────────────────────────────────────────
+  walltime summary
+──────────────────────────────────────────────────
+  Total:      7.329s
+
+  History: cargo build (last 6 runs)
+  ┌─────┬──────────────┬────────┬──────┐
+  │ Run │         Date │  Total │ Exit │
+  ├─────┼──────────────┼────────┼──────┤
+  │  #1 │ Apr 06 14:42 │ 7.615s │    0 │
+  │  #2 │ Apr 06 14:42 │ 7.189s │    0 │
+  │  #3 │ Apr 06 14:43 │ 7.490s │    0 │
+  │  #4 │ Apr 06 14:43 │ 7.792s │    0 │
+  │  #5 │ Apr 06 14:45 │ 7.656s │    0 │
+  │  #6 │ Apr 06 14:46 │ 7.328s │    0 │ ← current
+  └─────┴──────────────┴────────┴──────┘
+
+  Exit code:  0
+──────────────────────────────────────────────────
