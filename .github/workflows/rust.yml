@@ -43,7 +43,7 @@ jobs:
         run: nix develop -c just fmt-check
 
       - name: Check README.md is up to date
-        run: nix develop -c cargo-readme-worktree --check
+        run: nix develop -c cargo-readme-workspace --check
 
       - name: Clippy
         run: nix develop -c just lint
@@ -52,7 +52,7 @@ jobs:
         run: nix develop -c just test
 
       - name: Documentation
-        run: nix develop -c cargo doc --no-deps --all-features
+        run: nix develop -c just doc
 
       - name: Build
         run: nix develop -c just build

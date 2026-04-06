@@ -5,6 +5,7 @@ edition.workspace = true
 license.workspace = true
 repository.workspace = true
 description = "CLI for measuring time spent in a process"
+readme = "../../README.md"
 
 [[bin]]
 name = "wtime"

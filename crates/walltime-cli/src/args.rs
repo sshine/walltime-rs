@@ -1,4 +1,8 @@
-//! CLI argument definitions.
+//! CLI argument definitions using [`clap`].
+//!
+//! The [`Args`] struct derives [`Parser`] and describes every flag and option
+//! accepted by the `wtime` binary. See the crate-level documentation for the
+//! full help output.
 
 use clap::Parser;
 use walltime_core::timestamp::DEFAULT_FORMAT;

@@ -1,8 +1,6 @@
-# Workaround: cargo-readme cannot parse Cargo.toml files that use workspace
-# inheritance (e.g. `version.workspace = true`). This module materializes those
-# values into a temporary copy before invoking cargo-readme, then restores the
-# original. Should be removed once cargo-readme supports workspace inheritance
-# natively.
+# Workaround: cargo-readme cannot parse Cargo.toml files that use workspace inheritance (e.g. `version.workspace = true`).
+# This module materializes those values into a temporary copy before invoking cargo-readme, then restores the original.
+
 { ... }:
 {
   perSystem =
@@ -17,7 +15,7 @@
         fi
 
         root="$(git rev-parse --show-toplevel)"
-        toml="$root/crates/walltime-core/Cargo.toml"
+        toml="$root/crates/walltime-cli/Cargo.toml"
         cp "$toml" "$toml.bak"
         trap 'mv "$toml.bak" "$toml"' EXIT
         sed \
@@ -28,7 +26,7 @@
           "$toml.bak" > "$toml"
         tmp=$(mktemp)
         trap 'rm -f "$tmp"; mv "$toml.bak" "$toml"' EXIT
-        (cd "$root/crates/walltime-core" && cargo readme --no-title --no-license --no-badges) > "$tmp"
+        (cd "$root/crates/walltime-cli" && cargo readme --no-title --no-license --no-badges) > "$tmp"
         mv "$toml.bak" "$toml"
         trap - EXIT
 

@@ -1,3 +1,8 @@
+//! Error types for the walltime crates.
+//!
+//! All public fallible APIs return [`Result<T>`], backed by the [`enum@Error`] enum
+//! which uses [`thiserror`] for ergonomic `Display` and `Error` implementations.
+
 use thiserror::Error;
 
 /// A convenient result type alias.
