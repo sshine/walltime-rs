@@ -17,6 +17,9 @@
           pre-commit.commands.treefmt = {
             run = "treefmt --fail-on-change --no-cache {staged_files}";
           };
+          pre-push.commands.readme = {
+            run = "cargo-readme-workspace --check";
+          };
         };
       };
     in
@@ -30,6 +33,8 @@
           pkgs.cargo-insta
           pkgs.stdenv.cc
           pkgs.just
+          pkgs.cargo-readme
+          config.packages.cargo-readme-workspace
         ];
 
         env = [

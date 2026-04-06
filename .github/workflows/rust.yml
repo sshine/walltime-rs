@@ -42,6 +42,9 @@ jobs:
       - name: Check formatting
         run: nix develop -c just fmt-check
 
+      - name: Check README.md is up to date
+        run: nix develop -c cargo-readme-worktree --check
+
       - name: Clippy
         run: nix develop -c just lint
 
