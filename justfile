@@ -36,11 +36,15 @@ build:
 doc *args='':
     cargo doc --no-deps --all-features {{args}}
 
-readme:
-    cargo-readme-workspace
+readme_args := "--project-root crates/walltime-cli --no-title --no-license --no-badges"
 
+# Regenerate README.md from the walltime-cli crate docs
+readme:
+    cargo readme {{readme_args}} -o README.md
+
+# Check README.md is in sync with the crate docs
 readme-check:
-    cargo-readme-workspace --check
+    cargo readme {{readme_args}} | diff - README.md
 
 # Regenerate Cargo.nix from Cargo.toml/Cargo.lock
 cargo-nix:

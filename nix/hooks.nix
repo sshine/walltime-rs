@@ -11,11 +11,16 @@
       ...
     }:
     let
+      # Flags to reproduce the committed README.md from the walltime-cli crate docs.
+      readmeArgs = "--project-root crates/walltime-cli --no-title --no-license --no-badges";
+
       # Reference tools by absolute store path: the `nix flake check` hk-check sandbox
       # runs hooks without the devshell PATH, so a bare `treefmt` is not found there.
       treefmt = lib.getExe config.treefmt.build.wrapper;
 
-      cargo-readme-workspace = lib.getExe config.packages.cargo-readme-workspace;
+      # Called by store path rather than via `cargo readme`, so the cargo-subcommand
+      # argv has to be supplied by hand: without it clap only prints its usage.
+      cargo-readme = "${lib.getExe' config.packages.cargo-readme "cargo-readme"} readme";
     in
     {
       # Cargo.nix is generated; deadnix flags its unused lambda patterns and would
@@ -41,8 +46,8 @@
             check = "cargo clippy --all-targets --all-features -- -D warnings";
           };
           readme = {
-            check = "${cargo-readme-workspace} --check";
-            fix = cargo-readme-workspace;
+            check = "${cargo-readme} ${readmeArgs} | diff - README.md";
+            fix = "${cargo-readme} ${readmeArgs} -o README.md";
           };
           cargo-nix = {
             check = "${lib.getExe config.packages.cargo-nix} --check";
