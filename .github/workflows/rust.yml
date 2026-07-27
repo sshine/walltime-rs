@@ -60,6 +60,9 @@ jobs:
       - name: Check Cargo.nix is up to date
         run: nix develop -c just cargo-nix-check
 
+      - name: Lockfile check
+        run: nix develop -c cargo metadata --locked --format-version 1 > /dev/null
+
       - name: Package check
         run: nix develop -c cargo package --workspace
 

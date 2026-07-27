@@ -6,7 +6,7 @@
 # Nix
 /.direnv/
 /result
-/lefthook.yml
+/hk.pkl
 
 # Scratch files from 'just cargo-nix-check', normally removed on exit
 /.Cargo.nix.check
