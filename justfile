@@ -42,8 +42,16 @@ readme:
 readme-check:
     cargo-readme-workspace --check
 
+# Regenerate Cargo.nix from Cargo.toml/Cargo.lock
+cargo-nix:
+    cargo-nix
+
+# Check Cargo.nix is in sync with Cargo.toml/Cargo.lock
+cargo-nix-check:
+    cargo-nix --check
+
 # Run CI checks locally
-ci: fmt-check lint test doc readme-check build
+ci: fmt-check lint test doc readme-check cargo-nix-check build
     @echo "All CI checks passed!"
 
 # Watch for changes and run tests

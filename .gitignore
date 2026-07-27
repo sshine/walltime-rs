@@ -8,6 +8,10 @@
 /result
 /lefthook.yml
 
+# Scratch files from 'just cargo-nix-check', normally removed on exit
+/.Cargo.nix.check
+/.crate-hashes.check.json
+
 # IDE
 .idea/
 .vscode/

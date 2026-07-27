@@ -33,8 +33,10 @@
           pkgs.cargo-insta
           pkgs.stdenv.cc
           pkgs.just
+          pkgs.crate2nix
           pkgs.cargo-readme
           config.packages.cargo-readme-workspace
+          config.packages.cargo-nix
         ];
 
         env = [

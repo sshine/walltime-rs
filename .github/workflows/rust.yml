@@ -57,6 +57,9 @@ jobs:
       - name: Check README.md is up to date
         run: nix develop -c just readme-check
 
+      - name: Check Cargo.nix is up to date
+        run: nix develop -c just cargo-nix-check
+
       - name: Package check
         run: nix develop -c cargo package --workspace
 

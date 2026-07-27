@@ -1,26 +1,23 @@
-{ inputs, ... }:
+{ ... }:
 {
   perSystem =
-    { system, ... }:
+    { pkgs, lib, ... }:
     let
-      cargoNix = inputs.crate2nix.tools.${system}.appliedCargoNix {
-        name = "walltime";
-        src = ../.;
-      };
+      cargoNix = import ../Cargo.nix { inherit pkgs; };
     in
-    {
+    rec {
+      # Building each member separately catches breakage in walltime-core that the
+      # binary's own code paths happen not to exercise.
       checks = {
         walltime-core = cargoNix.workspaceMembers.walltime-core.build;
-        walltime-cli = cargoNix.workspaceMembers.walltime-cli.build;
+        walltime-cli = packages.default;
       };
 
-      packages = {
-        default = cargoNix.workspaceMembers.walltime-cli.build;
-      };
+      packages.default = pkgs.callPackage ./_package.nix { };
 
       apps.default = {
         type = "app";
-        program = "${cargoNix.workspaceMembers.walltime-cli.build}/bin/wtime";
+        program = lib.getExe packages.default;
       };
     };
 }
