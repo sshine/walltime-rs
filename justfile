@@ -8,11 +8,11 @@ eval:
     cargo clean
     ./wtime -t -0 -d "Compiling (.*)" -m 1 cargo build
 
-# Format all code (Rust + Nix)
+# Format all code (Rust + Nix + Markdown)
 fmt:
     treefmt
 
-# Check formatting (Rust + Nix)
+# Check formatting (Rust + Nix + Markdown)
 fmt-check:
     treefmt --fail-on-change --no-cache
 

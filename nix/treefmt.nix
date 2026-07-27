@@ -19,6 +19,7 @@
           enable = true;
           package = rust-toolchain;
         };
+        programs.mdformat.enable = true;
       };
     };
 }
