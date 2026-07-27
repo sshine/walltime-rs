@@ -5,6 +5,50 @@ command, streams its output (optionally with timestamps), tracks phases
 via regex matching, and prints a colorful timing summary with run history
 comparison.
 
+## Installation
+
+To run `wtime` without installing it:
+
+```
+$ nix run github:sshine/walltime-rs -- cargo build
+```
+
+To install it, apply the overlay and take the package from `pkgs`. It is
+exposed as both `walltime-cli` (the crate) and `wtime` (the binary):
+
+```nix
+{
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+
+    walltime-rs = {
+      url = "github:sshine/walltime-rs";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+  };
+
+  outputs =
+    { nixpkgs, walltime-rs, ... }:
+    {
+      nixosConfigurations.myhost = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          (
+            { pkgs, ... }:
+            {
+              nixpkgs.overlays = [ walltime-rs.overlays.default ];
+              environment.systemPackages = [ pkgs.wtime ];
+            }
+          )
+        ];
+      };
+    };
+}
+```
+
+The overlay builds against whichever nixpkgs it is applied to, so the package
+can be overridden and cross-compiled like any other.
+
 ## Examples
 
 ### Default
