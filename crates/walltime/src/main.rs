@@ -1,4 +1,4 @@
-//! The `wtime` binary. See the crate documentation for usage.
+//! The `walltime` binary. See the crate documentation for usage.
 
 mod args;
 

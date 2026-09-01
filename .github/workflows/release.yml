@@ -47,8 +47,8 @@ jobs:
       - name: Smoke-test the x86_64 binary
         run: |
           tar -xzf "dist/walltime-${GITHUB_REF_NAME}-x86_64-unknown-linux-musl.tar.gz" -C /tmp
-          /tmp/wtime --version
-          /tmp/wtime --no-log echo hello
+          /tmp/walltime --version
+          /tmp/walltime --no-log echo hello
 
       # Packaging separately puts any manifest or include/exclude mistake before
       # the publish, which cannot be undone.

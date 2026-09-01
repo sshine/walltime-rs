@@ -1,7 +1,7 @@
 //! CLI argument definitions using [`clap`].
 //!
 //! The [`Args`] struct derives [`Parser`] and describes every flag and option
-//! accepted by the `wtime` binary. See the crate-level documentation for the
+//! accepted by the `walltime` binary. See the crate-level documentation for the
 //! full help output.
 
 use clap::Parser;
@@ -12,7 +12,7 @@ use walltime::timestamp::DEFAULT_FORMAT;
 /// Runs a command and provides a colorful timing summary, optional line
 /// timestamps, phase tracking, and run history comparison.
 #[derive(Debug, Parser)]
-#[command(name = "wtime", version, about)]
+#[command(name = "walltime", version, about)]
 pub struct Args {
     /// Enable line timestamp prefixing.
     #[arg(short = 't', long = "timestamps")]

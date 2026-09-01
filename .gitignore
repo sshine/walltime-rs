@@ -1,7 +1,7 @@
 # Rust
 /target/
 *.snap
-/wtime
+/walltime
 
 # Nix
 /.direnv/

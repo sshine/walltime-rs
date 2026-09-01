@@ -1,11 +1,11 @@
-# Prebuilt release binaries, for consumers who want wtime without a Rust toolchain
+# Prebuilt release binaries, for consumers who want walltime without a Rust toolchain
 # entering their build closure.
 #
 # The pinned version deliberately trails Cargo.toml: it names the last tag whose
 # artifacts are published, not whatever the working tree happens to claim. Bump it
 # once a tag's Release workflow has finished, with `just dist-hashes` for the values.
 #
-# An empty `hashes` means no tag has been released yet and `packages.wtime-bin` is
+# An empty `hashes` means no tag has been released yet and `packages.walltime-bin` is
 # absent; the same guard also keeps it off Darwin, which the release does not build.
 { ... }:
 {
@@ -18,7 +18,7 @@
     }:
     let
       release = {
-        version = "0.1.0";
+        version = "0.2.0";
         hashes = { };
       };
 
@@ -35,12 +35,12 @@
       };
     in
     lib.optionalAttrs (release.hashes ? ${system}) {
-      packages.wtime-bin =
-        pkgs.runCommand "wtime-bin-${release.version}"
+      packages.walltime-bin =
+        pkgs.runCommand "walltime-bin-${release.version}"
           {
             meta = {
               description = "CLI for measuring time spent in a process (prebuilt)";
-              mainProgram = "wtime";
+              mainProgram = "walltime";
               license = with lib.licenses; [
                 mit
                 asl20
@@ -51,7 +51,7 @@
           }
           ''
             tar -xzf ${tarball}
-            install -Dm755 wtime $out/bin/wtime
+            install -Dm755 walltime $out/bin/walltime
           '';
     };
 }

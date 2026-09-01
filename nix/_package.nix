@@ -11,6 +11,6 @@ in
 cargoNix.workspaceMembers.walltime.build.overrideAttrs (prev: {
   meta = (prev.meta or { }) // {
     description = "A library and CLI for measuring time spent in a process";
-    mainProgram = "wtime";
+    mainProgram = "walltime";
   };
 })

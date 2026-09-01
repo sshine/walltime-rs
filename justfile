@@ -4,9 +4,9 @@ default:
 
 eval:
     cargo build
-    cp target/debug/wtime .
+    cp target/debug/walltime .
     cargo clean
-    ./wtime -t -0 -d "Compiling (.*)" -m 1 cargo build
+    ./walltime -t -0 -d "Compiling (.*)" -m 1 cargo build
 
 # Format all code (Rust + Nix + Markdown)
 fmt:
@@ -69,7 +69,7 @@ dist version: (check-version version)
     set -e; for target in {{release_targets}}; do \
         cargo build --release --locked --target "$target" -p walltime; \
         name="walltime-{{version}}-$target"; \
-        tar -czf "dist/$name.tar.gz" -C "target/$target/release" wtime; \
+        tar -czf "dist/$name.tar.gz" -C "target/$target/release" walltime; \
         ( cd dist && sha256sum "$name.tar.gz" > "$name.tar.gz.sha256" ); \
     done
     @ls -1 dist

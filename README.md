@@ -1,6 +1,6 @@
 ## A library and CLI for measuring time spent in a process.
 
-`wtime` is a modern replacement for the UNIX `time` command. It runs a
+`walltime` is a modern replacement for the UNIX `time` command. It runs a
 command, streams its output (optionally with timestamps), tracks phases
 via regex matching, and prints a colorful timing summary with run history
 comparison.
@@ -18,18 +18,17 @@ Or download a statically linked binary for x86_64 or aarch64 Linux from the
 ships with a matching `.sha256`:
 
 ```
-$ tar -xzf walltime-v0.1.0-x86_64-unknown-linux-musl.tar.gz
-$ ./wtime --version
+$ tar -xzf walltime-v0.2.0-x86_64-unknown-linux-musl.tar.gz
+$ ./walltime --version
 ```
 
-To run `wtime` without installing it:
+To run `walltime` without installing it:
 
 ```
 $ nix run github:sshine/walltime-rs -- cargo build
 ```
 
-To install it, apply the overlay and take the package from `pkgs`. It is
-exposed as both `walltime` (the crate) and `wtime` (the binary):
+To install it, apply the overlay and take `walltime` from `pkgs`:
 
 ```nix
 {
@@ -52,7 +51,7 @@ exposed as both `walltime` (the crate) and `wtime` (the binary):
             { pkgs, ... }:
             {
               nixpkgs.overlays = [ walltime-rs.overlays.default ];
-              environment.systemPackages = [ pkgs.wtime ];
+              environment.systemPackages = [ pkgs.walltime ];
             }
           )
         ];
@@ -68,13 +67,13 @@ can be overridden and cross-compiled like any other.
 
 ### Default
 
-Without any parameters, `wtime` produces a summary with history at the end:
+Without any parameters, `walltime` produces a summary with history at the end:
 
 ```
-$ wtime cargo build
+$ walltime cargo build
    Compiling proc-macro2 v1.0.106
    ...
-   Compiling walltime v0.1.0
+   Compiling walltime v0.2.0
     Finished `dev` profile in 7.31s
 
 ──────────────────────────────────────────────────
@@ -99,14 +98,14 @@ Only successful runs (exit code 0) are included by default.
 
 When the program fails it prints all the failed runs instead.
 
-Use `wtime -a ...` to include all runs regardless of exit code.
+Use `walltime -a ...` to include all runs regardless of exit code.
 
 ### Timestamps
 
 To add wall-clock timestamps to every output line:
 
 ```
-$ wtime -t cargo build
+$ walltime -t cargo build
 [14:47:46.143]    Compiling proc-macro2 v1.0.106
 [14:47:46.143]    Compiling unicode-ident v1.0.24
 ...
@@ -117,7 +116,7 @@ $ wtime -t cargo build
 Timestamp format can be modified with `-f <format>`, e.g. UNIX epoch with milliseconds:
 
 ```
-$ wtime -t -0 -f '%s%.3f' cargo build
+$ walltime -t -0 -f '%s%.3f' cargo build
 [946684800.090]    Compiling proc-macro2 v1.0.106
 ...
 [946684801.881]    Compiling errno v0.3.14
@@ -131,7 +130,7 @@ $ wtime -t -0 -f '%s%.3f' cargo build
 To add timestamps that begin from zero instead of current local time:
 
 ```
-$ wtime -t -0 cargo build
+$ walltime -t -0 cargo build
 [00:00:00.086]    Compiling proc-macro2 v1.0.106
 [00:00:00.086]    Compiling unicode-ident v1.0.24
 ...
@@ -144,7 +143,7 @@ $ wtime -t -0 cargo build
 To track phases of a process, use `-d` and a regex with a capture group:
 
 ```
-$ wtime -t -0 -d 'Compiling ([^ ]*)' cargo build
+$ walltime -t -0 -d 'Compiling ([^ ]*)' cargo build
 ...
 
   Phases:
@@ -164,7 +163,7 @@ Before matching the regex, all ANSI codes are stripped from the string.
 To hide phases that take shorter than some amount of seconds, use `-m N` to focus on the slow ones:
 
 ```
-$ wtime -t -0 -d 'Compiling ([^ ]*)' -m 1 cargo build
+$ walltime -t -0 -d 'Compiling ([^ ]*)' -m 1 cargo build
 ...
 
   Phases:
@@ -183,7 +182,7 @@ A modern replacement for the UNIX `time` command.
 
 Runs a command and provides a colorful timing summary, optional line timestamps, phase tracking, and run history comparison.
 
-Usage: wtime [OPTIONS] <COMMAND>...
+Usage: walltime [OPTIONS] <COMMAND>...
 
 Arguments:
   <COMMAND>...

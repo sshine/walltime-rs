@@ -7,10 +7,6 @@ repository.workspace = true
 description = "A library and CLI for measuring time spent in a process"
 readme = "../../README.md"
 
-[[bin]]
-name = "wtime"
-path = "src/main.rs"
-
 [lints]
 workspace = true
 
