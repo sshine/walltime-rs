@@ -8,9 +8,9 @@
 let
   cargoNix = import ../Cargo.nix { inherit pkgs; };
 in
-cargoNix.workspaceMembers.walltime-cli.build.overrideAttrs (prev: {
+cargoNix.workspaceMembers.walltime.build.overrideAttrs (prev: {
   meta = (prev.meta or { }) // {
-    description = "CLI for measuring time spent in a process";
+    description = "A library and CLI for measuring time spent in a process";
     mainProgram = "wtime";
   };
 })

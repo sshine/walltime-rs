@@ -5,7 +5,7 @@
 //! full help output.
 
 use clap::Parser;
-use walltime_core::timestamp::DEFAULT_FORMAT;
+use walltime::timestamp::DEFAULT_FORMAT;
 
 /// A modern replacement for the UNIX `time` command.
 ///

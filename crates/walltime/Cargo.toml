@@ -1,10 +1,10 @@
 [package]
-name = "walltime-cli"
+name = "walltime"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
 repository.workspace = true
-description = "CLI for measuring time spent in a process"
+description = "A library and CLI for measuring time spent in a process"
 readme = "../../README.md"
 
 [[bin]]
@@ -15,11 +15,19 @@ path = "src/main.rs"
 workspace = true
 
 [dependencies]
-walltime-core.workspace = true
 thiserror.workspace = true
 serde.workspace = true
+serde_json.workspace = true
 tracing.workspace = true
-clap.workspace = true
 tokio.workspace = true
+regex.workspace = true
+strip-ansi-escapes.workspace = true
+terminal_size.workspace = true
+chrono.workspace = true
 owo-colors.workspace = true
+clap.workspace = true
 ctrlc.workspace = true
+
+[dev-dependencies]
+insta.workspace = true
+tempfile.workspace = true

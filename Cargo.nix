@@ -38,25 +38,27 @@ rec {
   # "public" attributes that we attempt to keep stable with new versions of crate2nix.
   #
 
+  rootCrate = rec {
+    packageId = "walltime";
 
+    # Use this attribute to refer to the derivation building your root crate package.
+    # You can override the features with rootCrate.build.override { features = [ "default" "feature1" ... ]; }.
+    build = internal.buildRustCrateWithFeatures {
+      inherit packageId;
+    };
+
+    # Debug support which might change between releases.
+    # File a bug if you depend on any for non-debug work!
+    debug = internal.debugCrate { inherit packageId; };
+  };
   # Refer your crate build derivation by name here.
   # You can override the features with
   # workspaceMembers."${crateName}".build.override { features = [ "default" "feature1" ... ]; }.
   workspaceMembers = {
-    "walltime-cli" = rec {
-      packageId = "walltime-cli";
+    "walltime" = rec {
+      packageId = "walltime";
       build = internal.buildRustCrateWithFeatures {
-        packageId = "walltime-cli";
-      };
-
-      # Debug support which might change between releases.
-      # File a bug if you depend on any for non-debug work!
-      debug = internal.debugCrate { inherit packageId; };
-    };
-    "walltime-core" = rec {
-      packageId = "walltime-core";
-      build = internal.buildRustCrateWithFeatures {
-        packageId = "walltime-core";
+        packageId = "walltime";
       };
 
       # Debug support which might change between releases.
@@ -2523,8 +2525,8 @@ rec {
           "serde" = [ "dep:serde" ];
         };
       };
-      "walltime-cli" = rec {
-        crateName = "walltime-cli";
+      "walltime" = rec {
+        crateName = "walltime";
         version = "0.1.0";
         edition = "2024";
         crateBin = [
@@ -2534,8 +2536,14 @@ rec {
             requiredFeatures = [ ];
           }
         ];
-        src = lib.cleanSourceWith { filter = sourceFilter;  src = ./crates/walltime-cli; };
+        src = lib.cleanSourceWith { filter = sourceFilter;  src = ./crates/walltime; };
         dependencies = [
+          {
+            name = "chrono";
+            packageId = "chrono";
+            usesDefaultFeatures = false;
+            features = [ "clock" "std" "serde" ];
+          }
           {
             name = "clap";
             packageId = "clap";
@@ -2544,48 +2552,6 @@ rec {
           {
             name = "ctrlc";
             packageId = "ctrlc";
-          }
-          {
-            name = "owo-colors";
-            packageId = "owo-colors";
-          }
-          {
-            name = "serde";
-            packageId = "serde";
-            features = [ "derive" ];
-          }
-          {
-            name = "thiserror";
-            packageId = "thiserror";
-          }
-          {
-            name = "tokio";
-            packageId = "tokio";
-            features = [ "rt" "process" "io-util" "macros" "rt-multi-thread" ];
-          }
-          {
-            name = "tracing";
-            packageId = "tracing";
-          }
-          {
-            name = "walltime-core";
-            packageId = "walltime-core";
-          }
-        ];
-
-      };
-      "walltime-core" = rec {
-        crateName = "walltime-core";
-        version = "0.1.0";
-        edition = "2024";
-        src = lib.cleanSourceWith { filter = sourceFilter;  src = ./crates/walltime-core; };
-        libName = "walltime_core";
-        dependencies = [
-          {
-            name = "chrono";
-            packageId = "chrono";
-            usesDefaultFeatures = false;
-            features = [ "clock" "std" "serde" ];
           }
           {
             name = "owo-colors";

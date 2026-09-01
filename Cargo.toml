@@ -15,9 +15,6 @@ unused_must_use = "deny"
 unwrap_used = "deny"
 
 [workspace.dependencies]
-# Internal crates
-walltime-core = { version = "0.1.0", path = "crates/walltime-core" }
-
 # Error handling
 thiserror = "2"
 

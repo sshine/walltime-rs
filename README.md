@@ -1,4 +1,4 @@
-## CLI for measuring time spent in a process.
+## A library and CLI for measuring time spent in a process.
 
 `wtime` is a modern replacement for the UNIX `time` command. It runs a
 command, streams its output (optionally with timestamps), tracks phases
@@ -7,6 +7,21 @@ comparison.
 
 ## Installation
 
+From crates.io:
+
+```
+$ cargo install walltime
+```
+
+Or download a statically linked binary for x86_64 or aarch64 Linux from the
+[releases page](https://github.com/sshine/walltime-rs/releases). Each tarball
+ships with a matching `.sha256`:
+
+```
+$ tar -xzf walltime-v0.1.0-x86_64-unknown-linux-musl.tar.gz
+$ ./wtime --version
+```
+
 To run `wtime` without installing it:
 
 ```
@@ -14,7 +29,7 @@ $ nix run github:sshine/walltime-rs -- cargo build
 ```
 
 To install it, apply the overlay and take the package from `pkgs`. It is
-exposed as both `walltime-cli` (the crate) and `wtime` (the binary):
+exposed as both `walltime` (the crate) and `wtime` (the binary):
 
 ```nix
 {
@@ -59,7 +74,7 @@ Without any parameters, `wtime` produces a summary with history at the end:
 $ wtime cargo build
    Compiling proc-macro2 v1.0.106
    ...
-   Compiling walltime-cli v0.1.0
+   Compiling walltime v0.1.0
     Finished `dev` profile in 7.31s
 
 ──────────────────────────────────────────────────
@@ -138,8 +153,7 @@ $ wtime -t -0 -d 'Compiling ([^ ]*)' cargo build
     regex-automata        1.119s  (15.7%)
     ...
     chrono                0.538s  (7.5%)
-    walltime-core         0.480s  (6.7%)
-    walltime-cli          0.500s  (7.0%)
+    walltime              0.980s  (13.7%)
 ...
 ```
 
@@ -218,3 +232,10 @@ Options:
   -V, --version
           Print version
 ```
+
+## Library
+
+The same crate is a library, so the pieces the binary is assembled from can be
+used on their own: `runner` spawns a child process and streams its output,
+`phase` tracks phases via regex matching, `timestamp` formats line prefixes,
+`summary` renders the summary table, and `history` persists runs to JSONL.

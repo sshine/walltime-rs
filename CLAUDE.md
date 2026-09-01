@@ -6,8 +6,7 @@ A library and CLI for measuring time spent in a process
 
 This is a Cargo workspace with crates under `crates/`:
 
-- **walltime-core**: Core library with domain logic and error types
-- **walltime-cli**: CLI binary application
+- **walltime**: The library (domain logic and error types) and the `wtime` binary
 
 ## Development
 

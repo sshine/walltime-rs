@@ -36,9 +36,9 @@ build:
 doc *args='':
     cargo doc --no-deps --all-features {{args}}
 
-readme_args := "--project-root crates/walltime-cli --no-title --no-license --no-badges"
+readme_args := "--project-root crates/walltime --input src/lib.rs --no-title --no-license --no-badges"
 
-# Regenerate README.md from the walltime-cli crate docs
+# Regenerate README.md from the walltime crate docs
 readme:
     cargo readme {{readme_args}} -o README.md
 
