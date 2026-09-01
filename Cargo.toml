@@ -6,7 +6,7 @@ members = ["crates/*"]
 version = "0.2.0"
 edition = "2024"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/sshine/walltime"
+repository = "https://github.com/sshine/walltime-rs"
 
 [workspace.lints.rust]
 unused_must_use = "deny"
