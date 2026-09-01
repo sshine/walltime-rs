@@ -74,6 +74,14 @@ dist version: (check-version version)
     done
     @ls -1 dist
 
+# Print the SRI hashes nix/binary.nix pins, in nixpkgs system order
+dist-hashes:
+    @for target in {{release_targets}}; do \
+        system="${target%%-*}-linux"; \
+        hash="$(nix hash file --sri --type sha256 dist/walltime-*-"$target".tar.gz)"; \
+        printf '"%s" = "%s";\n' "$system" "$hash"; \
+    done
+
 # Run CI checks locally
 ci: fmt-check lint test doc readme-check cargo-nix-check build
     @echo "All CI checks passed!"
