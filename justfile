@@ -54,6 +54,26 @@ cargo-nix:
 cargo-nix-check:
     cargo-nix --check
 
+release_targets := "x86_64-unknown-linux-musl aarch64-unknown-linux-musl"
+
+# Assert the release tag names the version cargo would publish
+check-version version:
+    @pkgid="$(cargo pkgid -p walltime)"; crate="v${pkgid##*#}"; \
+    if [ "$crate" != "{{version}}" ]; then \
+        echo "tag {{version}} does not match crate version $crate" >&2; exit 1; \
+    fi
+
+# Build the static release artifacts and their checksums into dist/
+dist version: (check-version version)
+    rm -rf dist && mkdir -p dist
+    set -e; for target in {{release_targets}}; do \
+        cargo build --release --locked --target "$target" -p walltime; \
+        name="walltime-{{version}}-$target"; \
+        tar -czf "dist/$name.tar.gz" -C "target/$target/release" wtime; \
+        ( cd dist && sha256sum "$name.tar.gz" > "$name.tar.gz.sha256" ); \
+    done
+    @ls -1 dist
+
 # Run CI checks locally
 ci: fmt-check lint test doc readme-check cargo-nix-check build
     @echo "All CI checks passed!"

@@ -32,3 +32,4 @@ Thumbs.db
 
 # This application
 .walltime.jsonl
+dist/
