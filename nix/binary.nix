@@ -5,8 +5,9 @@
 # artifacts are published, not whatever the working tree happens to claim. Bump it
 # once a tag's Release workflow has finished, with `just dist-hashes` for the values.
 #
-# An empty `hashes` means no tag has been released yet and `packages.walltime-bin` is
-# absent; the same guard also keeps it off Darwin, which the release does not build.
+# The hashes are of the tarballs the release publishes, so they can be checked against
+# the .sha256 assets rather than taken on faith. Systems absent from `hashes` do not get
+# the package, which is what keeps it off Darwin, since the release builds only Linux.
 { ... }:
 {
   perSystem =
@@ -19,7 +20,10 @@
     let
       release = {
         version = "0.2.0";
-        hashes = { };
+        hashes = {
+          "x86_64-linux" = "sha256-5FVCATMr1k9zzauV8scjqqXc3TboAUId7bNQOLgz62k=";
+          "aarch64-linux" = "sha256-LTKSJWk41gsaALorxZO2GvLvjRiMNoQHJXOWeJzUipc=";
+        };
       };
 
       triple = {
