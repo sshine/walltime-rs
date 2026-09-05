@@ -20,7 +20,7 @@
 
       # Called by store path rather than via `cargo readme`, so the cargo-subcommand
       # argv has to be supplied by hand: without it clap only prints its usage.
-      cargo-readme = "${lib.getExe' config.packages.cargo-readme "cargo-readme"} readme";
+      cargo-readme = "${lib.getExe' pkgs.cargo-readme "cargo-readme"} readme";
     in
     {
       # Cargo.nix is generated; deadnix flags its unused lambda patterns and would
