@@ -20,6 +20,10 @@ fmt-check:
 lint:
     cargo clippy --all-targets --all-features -- -D warnings
 
+# Find dead Nix code, skipping the generated Cargo.nix
+lint-nix:
+    deadnix --fail nix/ flake.nix
+
 # Run all tests
 test:
     cargo test --all-features
@@ -83,7 +87,7 @@ dist-hashes:
     done
 
 # Run CI checks locally
-ci: fmt-check lint test doc readme-check cargo-nix-check build
+ci: fmt-check lint lint-nix test doc readme-check cargo-nix-check build
     @echo "All CI checks passed!"
 
 # Watch for changes and run tests
