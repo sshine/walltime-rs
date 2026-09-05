@@ -10,7 +10,7 @@
 { ... }:
 {
   perSystem =
-    { pkgs, lib, ... }:
+    { pkgs, ... }:
     let
       # rustc finds musl's crt objects in its own `self-contained` directory and can
       # link x86_64 unaided; only a foreign architecture needs a cross linker.
