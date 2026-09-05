@@ -11,8 +11,8 @@
       ...
     }:
     let
-      # Flags to reproduce the committed README.md from the walltime-cli crate docs.
-      readmeArgs = "--project-root crates/walltime-cli --no-title --no-license --no-badges";
+      # Flags to reproduce the committed README.md from the walltime crate docs.
+      readmeArgs = "--project-root crates/walltime --input src/lib.rs --no-title --no-license --no-badges";
 
       # Reference tools by absolute store path: the `nix flake check` hk-check sandbox
       # runs hooks without the devshell PATH, so a bare `treefmt` is not found there.
