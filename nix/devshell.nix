@@ -18,7 +18,7 @@
           pkgs.stdenv.cc
           pkgs.just
           pkgs.crate2nix
-          pkgs.cargo-readme
+          config.packages.cargo-readme
           config.packages.cargo-nix
         ];
 

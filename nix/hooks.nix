@@ -12,7 +12,8 @@
     }:
     let
       # Flags to reproduce the committed README.md from the walltime crate docs.
-      readmeArgs = "--project-root crates/walltime --input src/lib.rs --no-title --no-license --no-badges";
+      # Paths resolve against the repo root, the hook's cwd.
+      readmeArgs = "--project-root crates/walltime --input crates/walltime/src/lib.rs --no-title --no-license --no-badges";
 
       # Reference tools by absolute store path: the `nix flake check` hk-check sandbox
       # runs hooks without the devshell PATH, so a bare `treefmt` is not found there.
@@ -20,7 +21,7 @@
 
       # Called by store path rather than via `cargo readme`, so the cargo-subcommand
       # argv has to be supplied by hand: without it clap only prints its usage.
-      cargo-readme = "${lib.getExe' pkgs.cargo-readme "cargo-readme"} readme";
+      cargo-readme = "${lib.getExe' config.packages.cargo-readme "cargo-readme"} readme";
     in
     {
       # Cargo.nix is generated; deadnix flags its unused lambda patterns and would
